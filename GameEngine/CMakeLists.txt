@@ -275,8 +275,8 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     "_CRT_SECURE_NO_WARNINGS;"
     "_MBCS"
      ";"
-    "UNICODE"
-    "_UNICODE"
+    #"UNICODE"
+    #"_UNICODE"
     "WIN32_LEAN_AND_MEAN"
     "_WINSOCK_DEPRECATED_NO_WARNINGS"
     "_WINSOCKAPI_"   
@@ -331,25 +331,25 @@ set(ADDITIONAL_LIBRARY_DEPENDENCIES
     "ws2_32.lib"
 )
 
-include_directories("./")
-include_directories("./Maths/")
-include_directories("./WindowingAndInput/")
-include_directories("./WindowingAndInput/Win32/")
-include_directories("./Physics/")
-include_directories("./Physics/CollisionDetection/")
-include_directories("./Scene/")
-include_directories("./Networking/")
-include_directories("./Graphics/Renderer/")
-include_directories("./Graphics/Renderer/RenderingSupport/")
-include_directories("./Graphics/Camera/")
-include_directories("./Graphics/Lights/")
-include_directories("./EntityComponents/")
-include_directories("./Debugging/")
-include_directories("./AssetsHandling/")
-include_directories("./AI/BehaviorTrees/")
-include_directories("./AI/PathFinding/")
-include_directories("./AI/PushdownAutomata/")
-include_directories("./AI/StateMachine/")
+#include_directories("./")
+include_directories("Maths/")
+include_directories("WindowingAndInput/")
+include_directories("WindowingAndInput/Win32/")
+include_directories("Physics/")
+include_directories("Physics/CollisionDetection/")
+include_directories("Scene/")
+include_directories("Networking/")
+include_directories("Graphics/Renderer/")
+include_directories("Graphics/Renderer/RenderingSupport/")
+include_directories("Graphics/Camera/")
+include_directories("Graphics/Lights/")
+include_directories("EntityComponents/")
+include_directories("Debugging/")
+include_directories("AssetsHandling/")
+include_directories("AI/BehaviorTrees/")
+include_directories("AI/PathFinding/")
+include_directories("AI/PushdownAutomata/")
+include_directories("AI/StateMachine/")
 include_directories("../OpenGLRendering/")
 
 

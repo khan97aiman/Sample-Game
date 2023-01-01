@@ -95,6 +95,7 @@ include_directories("./")
 include_directories("../GameEngine/")
 include_directories("../GameEngine/Graphics/Renderer/RenderingSupport/")
 include_directories("../GameEngine/Maths/")
+include_directories("../GameEngine/AssetsHandling/")
 include_directories("../GameEngine/WindowingAndInput/")
 include_directories("../GameEngine/WindowingAndInput/Win32/")
 
