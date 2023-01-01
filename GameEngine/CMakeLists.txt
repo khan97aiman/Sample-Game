@@ -136,42 +136,6 @@ set(Maths
 )
 source_group("Maths" FILES ${Maths})
 
-set(Networking
-    "./Networking/GameClient.h"  
-    "./Networking/GameClient.cpp"
-    "./Networking/GameServer.h"
-    "./Networking/GameServer.cpp"
-    "./Networking/NetworkBase.h"
-    "./Networking/NetworkBase.cpp"
-    "./Networking/NetworkObject.h"
-    "./Networking/NetworkObject.cpp"
-    "./Networking/NetworkState.h"
-    "./Networking/NetworkState.cpp"
-)
-source_group("Networking" FILES ${Networking})
-
-set(Networking_enet_Files
-    "./Networking/enet/callbacks.h"
-    "./Networking/enet/callbacks.c"
-    "./Networking/enet/list.h"
-    "./Networking/enet/list.c"
-    "./Networking/enet/protocol.h"
-    "./Networking/enet/protocol.c"
-    "./Networking/enet/win32.h"
-    "./Networking/enet/win32.c"
-
-    "./Networking/enet/enet.h"
-    "./Networking/enet/time.h"
-    "./Networking/enet/types.h"
-    "./Networking/enet/utility.h"
-
-    "./Networking/enet/compress.c"
-    "./Networking/enet/host.c"
-    "./Networking/enet/packet.c"
-    "./Networking/enet/peer.c"
-)
-source_group("Networking\\eNet" FILES ${Networking_enet_Files})
-
 set(Physics
     "./Physics/constraint.h"  
     "./Physics/constraint.h"  
@@ -242,8 +206,8 @@ set(ALL_FILES
     ${Graphics_Renderer}
     ${Graphics_Renderering_Support}
     ${Maths}
-    ${Networking}
-    ${Networking_enet_Files}
+    #${Networking}
+    #${Networking_enet_Files}
     ${Physics}
     ${Physics_Collision_Detection}
     ${Scene}
@@ -251,7 +215,7 @@ set(ALL_FILES
     ${Windowing_and_Input__Win32}
 )
 
-set_source_files_properties(${ALL_FILES} PROPERTIES LANGUAGE CXX)
+#set_source_files_properties(${ALL_FILES} PROPERTIES LANGUAGE CXX)
 
 ################################################################################
 # Target
@@ -262,10 +226,6 @@ use_props(${PROJECT_NAME} "${CMAKE_CONFIGURATION_TYPES}" "${DEFAULT_CXX_PROPS}")
 set(ROOT_NAMESPACE GameEngine)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    VS_GLOBAL_KEYWORD "Win32Proj"
-)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
     INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
 )
 ################################################################################
@@ -274,26 +234,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     "_CRT_SECURE_NO_WARNINGS;"
     "_MBCS"
-     ";"
+    # ";"
     #"UNICODE"
     #"_UNICODE"
-    "WIN32_LEAN_AND_MEAN"
-    "_WINSOCK_DEPRECATED_NO_WARNINGS"
-    "_WINSOCKAPI_"   
-    "_WINSOCK2API_"
-)
-
-target_precompile_headers(${PROJECT_NAME} PRIVATE
-    <vector>
-    <map>
-    <stack>
-    <string>
-    <list>
-    <thread>
-    <atomic>
-    <functional>
-    <iostream>
-    <set>
+    #"WIN32_LEAN_AND_MEAN"
+    #"_WINSOCK_DEPRECATED_NO_WARNINGS"
+    #"_WINSOCKAPI_"   
+    #"_WINSOCK2API_"
 )
 
 ################################################################################
@@ -324,13 +271,6 @@ if(MSVC)
     )
 endif()
 
-################################################################################
-# Dependencies
-################################################################################
-set(ADDITIONAL_LIBRARY_DEPENDENCIES
-    "ws2_32.lib"
-)
-
 #include_directories("./")
 include_directories("Maths/")
 include_directories("WindowingAndInput/")
@@ -338,7 +278,7 @@ include_directories("WindowingAndInput/Win32/")
 include_directories("Physics/")
 include_directories("Physics/CollisionDetection/")
 include_directories("Scene/")
-include_directories("Networking/")
+include_directories("../Networking/")
 include_directories("Graphics/Renderer/")
 include_directories("Graphics/Renderer/RenderingSupport/")
 include_directories("Graphics/Camera/")

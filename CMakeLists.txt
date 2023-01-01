@@ -68,6 +68,7 @@ endif()
 # Sub-projects
 ################################################################################
 add_subdirectory(GameEngine)
+add_subdirectory(Networking)
 add_subdirectory(OpenGLRendering)
 add_subdirectory(SampleGame)
 if(USE_VULKAN)
