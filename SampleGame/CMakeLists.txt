@@ -195,6 +195,8 @@ include_directories("../GameEngine/AI/StateMachine/")
 
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC GameEngine)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC OpenGLRendering)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC Networking)
+
 
 if(USE_VULKAN)
 include_directories("../VulkanRendering/")

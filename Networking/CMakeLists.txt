@@ -23,7 +23,7 @@ set(Header_Files
 source_group("Header Files" FILES ${Header_Files})
 
 set(Networking_enet_Files
-    "./enet/callbacks.h"
+    #"./enet/callbacks.h"
     "./enet/callbacks.c"
     "./enet/list.h"
     "./enet/list.c"
