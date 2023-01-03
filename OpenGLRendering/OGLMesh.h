@@ -21,12 +21,15 @@ namespace NCL {
 			OGLMesh();
 			OGLMesh(const std::string&filename);
 			static OGLMesh* GenerateQuad();
+			static OGLMesh* GenerateHUDQuad();
+
 			~OGLMesh();
 
 			void RecalculateNormals();
 
 			void UploadToGPU(Rendering::RendererBase* renderer = nullptr) override;
 			void UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount);
+			void Draw();
 
 		protected:
 			GLuint	GetVAO()			const { return vao;			}

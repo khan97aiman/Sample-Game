@@ -10,7 +10,7 @@ SampleGame::SampleGame() {
 #else 
 	renderer = new GameTechRenderer(*world);
 #endif
-
+	hudRenderer = new GameHUDRenderer();
 	physics = new PhysicsSystem(*world);
 
 	forceMagnitude = 10.0f;
@@ -51,6 +51,8 @@ void SampleGame::InitialiseAssets() {
 	shaders.insert(std::make_pair("basicShader", renderer->LoadShader("scene.vert", "scene.frag")));
 	shaders.insert(std::make_pair("skinningShader", renderer->LoadShader("skinning.vert", "scene.frag")));
 
+	hudRenderer->AddHudTextures("coin.png", Vector2(), Vector2());
+
 	InitWorld();
 	InitCamera();
 }
@@ -77,6 +79,7 @@ SampleGame::~SampleGame() {
 	delete hedgeMaze;
 	delete physics;
 	delete renderer;
+	delete hudRenderer;
 	delete world;
 }
 
@@ -85,8 +88,10 @@ void SampleGame::UpdateGame(float dt) {
 	world->GetMainCamera()->UpdateCamera(dt);
 
 	renderer->Render();
+	hudRenderer->Render();
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
+
 	physics->Update(dt);
 
 	remainingTime = remainingTime - dt;

@@ -2,6 +2,7 @@
 
 #include <GameObject.h>
 #include <GameTechRenderer.h>
+#include <GameHUDRenderer.h>
 #include <PhysicsSystem.h>
 #include <GameWorld.h>
 #include <map>
@@ -55,6 +56,7 @@ namespace NCL {
 #else
 			GameTechRenderer* renderer;
 #endif
+			GameHUDRenderer* hudRenderer;
 			PhysicsSystem* physics;
 			GameWorld* world;
 

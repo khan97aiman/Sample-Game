@@ -90,6 +90,8 @@ source_group("Graphics\\Lights" FILES ${Graphics_Lights})
 set(Graphics_Renderer
     "./Graphics/Renderer/GameTechRenderer.h"
     "./Graphics/Renderer/GameTechRenderer.cpp"
+    "./Graphics/Renderer/GameHUDRenderer.h"
+    "./Graphics/Renderer/GameHUDRenderer.cpp"
 )
 source_group("Graphics\\Renderer" FILES ${Graphics_Renderer})
 
@@ -111,6 +113,7 @@ set(Graphics_Renderering_Support
     "./Graphics/Renderer/RenderingSupport/ShaderBase.h"
     "./Graphics/Renderer/RenderingSupport/TextureBase.cpp"
     "./Graphics/Renderer/RenderingSupport/TextureBase.h"
+    "./Graphics/Renderer/RenderingSupport/TextureHUD.h"
 )
 source_group("Graphics\\Renderer\\Rendering Support" FILES ${Graphics_Renderering_Support})
 

@@ -59,6 +59,22 @@ OGLMesh* OGLMesh::GenerateQuad() {
 	return m;
 }
 
+OGLMesh* NCL::Rendering::OGLMesh::GenerateHUDQuad() {
+	OGLMesh* m = new OGLMesh();
+	m->primType = TriangleStrip;
+	m->positions.emplace_back(Vector3(-1.0f, 1.0f, 0.0f));
+	m->positions.emplace_back(Vector3(-1.0f, -1.0f, 0.0f));
+	m->positions.emplace_back(Vector3(1.0f, 1.0f, 0.0f));
+	m->positions.emplace_back(Vector3(1.0f, -1.0f, 0.0f));
+	m->texCoords.emplace_back(Vector2(0.0f, 1.0f));
+	m->texCoords.emplace_back(Vector2(0.0f, 0.0f));
+	m->texCoords.emplace_back(Vector2(1.0f, 1.0f));
+	m->texCoords.emplace_back(Vector2(1.0f, 0.0f));
+
+	m->UploadToGPU();
+	return m;
+}
+
 OGLMesh::~OGLMesh()	{
 	glDeleteVertexArrays(1, &vao);			//Delete our VAO
 	glDeleteBuffers(VertexAttribute::MAX_ATTRIBUTES, attributeBuffers);	//Delete our VBOs
@@ -140,6 +156,17 @@ void OGLMesh::UploadToGPU(Rendering::RendererBase* renderer) {
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void OGLMesh::Draw() {
+	glBindVertexArray(vao);
+	if (!GetIndexData().empty()) {
+		glDrawElements(primType, GetIndexCount(), GL_UNSIGNED_INT, 0);
+	}
+	else {
+		glDrawArrays(primType, 0, GetVertexCount());
+	}
+	glBindVertexArray(0);
 }
 
 void OGLMesh::UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount) {
