@@ -135,8 +135,8 @@ void GameTechRenderer::RenderFrame() {
 	RenderShadowMap();
 	RenderSkybox();
 	RenderCamera();
-	glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
 	RenderHUD();
+	glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -233,12 +233,21 @@ void GameTechRenderer::RenderSkybox() {
 }
 
 void GameTechRenderer::RenderHUD() {
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	BindShader(hudShader);
 	for (const auto& hudTexture : hudTextures) {
 		BindTextureToShader(hudTexture.texture, "guiTexture", 0);
+		Matrix4 modelMatrix = Matrix4::Translation(hudTexture.position) * Matrix4::Scale(hudTexture.scale);
+		glUniformMatrix4fv(glGetUniformLocation(hudShader->GetProgramID(), "modelMatrix"), 1, false, (float*)&modelMatrix);
 		BindMesh(quadModel);
 		DrawBoundMesh();
 	}
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void GameTechRenderer::RenderCamera() {
