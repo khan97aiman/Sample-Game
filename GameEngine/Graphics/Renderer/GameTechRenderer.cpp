@@ -17,6 +17,9 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
 	debugShader  = new OGLShader("debug.vert", "debug.frag");
 	shadowShader = new OGLShader("shadow.vert", "shadow.frag");
 
+	quadModel = OGLMesh::GenerateHUDQuad();
+	hudShader = new OGLShader("hud.vert", "hud.frag");
+
 	glGenTextures(1, &shadowTex);
 	glBindTexture(GL_TEXTURE_2D, shadowTex);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -66,6 +69,7 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
 GameTechRenderer::~GameTechRenderer()	{
 	glDeleteTextures(1, &shadowTex);
 	glDeleteFramebuffers(1, &shadowFBO);
+	delete quadModel;
 }
 
 void GameTechRenderer::LoadSkybox() {
@@ -117,6 +121,7 @@ void GameTechRenderer::RenderFrame() {
 	RenderSkybox();
 	RenderCamera();
 	glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
+	RenderHUD();
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -210,6 +215,15 @@ void GameTechRenderer::RenderSkybox() {
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+}
+
+void GameTechRenderer::RenderHUD() {
+	BindShader(hudShader);
+	for (const auto& hudTexture : hudTextures) {
+		BindTextureToShader(hudTexture.texture, "guiTexture", 0);
+		BindMesh(quadModel);
+		DrawBoundMesh();
+	}
 }
 
 void GameTechRenderer::RenderCamera() {
@@ -405,6 +419,10 @@ TextureBase* GameTechRenderer::LoadTexture(const string& name) {
 
 ShaderBase* GameTechRenderer::LoadShader(const string& vertex, const string& fragment) {
 	return new OGLShader(vertex, fragment);
+}
+
+void GameTechRenderer::AddHudTextures(const string& name, const Vector2& position, const Vector2& scale) {
+	hudTextures.emplace_back(TextureHUD(TextureLoader::LoadAPITexture(name), position, scale));
 }
 
 void GameTechRenderer::SetDebugStringBufferSizes(size_t newVertCount) {

@@ -51,7 +51,7 @@ void SampleGame::InitialiseAssets() {
 	shaders.insert(std::make_pair("basicShader", renderer->LoadShader("scene.vert", "scene.frag")));
 	shaders.insert(std::make_pair("skinningShader", renderer->LoadShader("skinning.vert", "scene.frag")));
 
-	//hudRenderer->AddHudTextures("coin.png", Vector2(), Vector2());
+	renderer->AddHudTextures("coin.png", Vector2(), Vector2());
 
 	InitWorld();
 	InitCamera();

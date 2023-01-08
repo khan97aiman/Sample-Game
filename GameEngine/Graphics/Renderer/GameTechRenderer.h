@@ -5,6 +5,8 @@
 #include "OGLMesh.h"
 
 #include "GameWorld.h"
+#include "TextureHUD.h"
+
 
 namespace NCL {
 	class Maths::Vector3;
@@ -20,6 +22,7 @@ namespace NCL {
 			MeshGeometry*	LoadMesh(const string& name);
 			TextureBase*	LoadTexture(const string& name);
 			ShaderBase*		LoadShader(const string& vertex, const string& fragment);
+			void AddHudTextures(const string& name, const Vector2& position, const Vector2& scale);
 
 		protected:
 			void NewRenderLines();
@@ -36,6 +39,7 @@ namespace NCL {
 			void RenderShadowMap();
 			void RenderCamera(); 
 			void RenderSkybox();
+			void RenderHUD();
 
 			void LoadSkybox();
 
@@ -75,6 +79,11 @@ namespace NCL {
 			GLuint textColourVBO;
 			GLuint textTexVBO;
 			size_t textCount;
+
+			//hud things
+			OGLMesh* quadModel;
+			OGLShader* hudShader;
+			vector<TextureHUD> hudTextures;
 		};
 	}
 }

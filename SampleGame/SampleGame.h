@@ -56,7 +56,7 @@ namespace NCL {
 #else
 			GameTechRenderer* renderer;
 #endif
-			GameHUDRenderer* hudRenderer;
+			//GameHUDRenderer* hudRenderer;
 			PhysicsSystem* physics;
 			GameWorld* world;
 

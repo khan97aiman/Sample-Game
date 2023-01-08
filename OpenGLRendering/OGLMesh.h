@@ -29,7 +29,6 @@ namespace NCL {
 
 			void UploadToGPU(Rendering::RendererBase* renderer = nullptr) override;
 			void UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount);
-			void Draw();
 
 		protected:
 			GLuint	GetVAO()			const { return vao;			}

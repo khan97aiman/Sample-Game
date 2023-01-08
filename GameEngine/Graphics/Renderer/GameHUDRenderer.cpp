@@ -35,6 +35,6 @@ void GameHUDRenderer::Render() {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texID);*/
 		BindTextureToShader(hudTexture.texture, "guiTexture", 0);
-		quadModel->Draw();
+		//quadModel->Draw();
 	}
 }
