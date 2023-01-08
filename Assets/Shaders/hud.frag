@@ -1,10 +1,11 @@
 #version 400 core
 
-in vec2 textureCoords;
-out vec4 out_Color;
+//in vec2 textureCoords;
+in vec4 colors;
+out vec4 fragColour;
 
-uniform sampler2D guiTexture;
+//uniform sampler2D guiTexture;
 
 void main(void) {
-	out_Color = texture(guiTexture,textureCoords);
+	fragColour = colors; //vec4(0, 1, 0, 1);//texture(guiTexture,textureCoords);
 }

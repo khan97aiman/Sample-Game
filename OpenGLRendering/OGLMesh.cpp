@@ -61,15 +61,23 @@ OGLMesh* OGLMesh::GenerateQuad() {
 
 OGLMesh* NCL::Rendering::OGLMesh::GenerateHUDQuad() {
 	OGLMesh* m = new OGLMesh();
-	m->primType = TriangleStrip;
-	m->positions.emplace_back(Vector3(-1.0f, 1.0f, 0.0f));
+	m->primType = Triangles;
+	/*m->positions.emplace_back(Vector3(-1.0f, 1.0f, 0.0f));
 	m->positions.emplace_back(Vector3(-1.0f, -1.0f, 0.0f));
 	m->positions.emplace_back(Vector3(1.0f, 1.0f, 0.0f));
 	m->positions.emplace_back(Vector3(1.0f, -1.0f, 0.0f));
 	m->texCoords.emplace_back(Vector2(0.0f, 1.0f));
 	m->texCoords.emplace_back(Vector2(0.0f, 0.0f));
 	m->texCoords.emplace_back(Vector2(1.0f, 1.0f));
-	m->texCoords.emplace_back(Vector2(1.0f, 0.0f));
+	m->texCoords.emplace_back(Vector2(1.0f, 0.0f));*/
+
+	m->positions.emplace_back(Vector3(0.0f, 0.5f, 0.0f));
+	m->positions.emplace_back(Vector3(0.5f, -0.5f, 0.0f));
+	m->positions.emplace_back(Vector3(-0.5f, -0.5f, 0.0f));
+	
+	m->colours.emplace_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	m->colours.emplace_back(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	m->colours.emplace_back(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 
 	m->UploadToGPU();
 	return m;
