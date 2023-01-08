@@ -90,8 +90,6 @@ source_group("Graphics\\Lights" FILES ${Graphics_Lights})
 set(Graphics_Renderer
     "./Graphics/Renderer/GameTechRenderer.h"
     "./Graphics/Renderer/GameTechRenderer.cpp"
-    "./Graphics/Renderer/GameHUDRenderer.h"
-    "./Graphics/Renderer/GameHUDRenderer.cpp"
 )
 source_group("Graphics\\Renderer" FILES ${Graphics_Renderer})
 

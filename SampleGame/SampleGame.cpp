@@ -10,7 +10,6 @@ SampleGame::SampleGame() {
 #else 
 	renderer = new GameTechRenderer(*world);
 #endif
-	//hudRenderer = new GameHUDRenderer();
 	physics = new PhysicsSystem(*world);
 
 	forceMagnitude = 10.0f;
@@ -79,7 +78,6 @@ SampleGame::~SampleGame() {
 	delete hedgeMaze;
 	delete physics;
 	delete renderer;
-	//delete hudRenderer;
 	delete world;
 }
 
@@ -88,7 +86,6 @@ void SampleGame::UpdateGame(float dt) {
 	world->GetMainCamera()->UpdateCamera(dt);
 
 	renderer->Render();
-	//hudRenderer->Render();
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
 
