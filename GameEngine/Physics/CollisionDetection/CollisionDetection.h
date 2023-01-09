@@ -121,13 +121,10 @@ namespace NCL {
 		static Vector3 Unproject(const Vector3& screenPos, const Camera& cam);
 
 		static Vector3		UnprojectScreenPosition(Vector3 position, float aspect, float fov, const Camera &c);
-		static Matrix4		GenerateInverseProjection(float aspect, float fov, float nearPlane, float farPlane);
-		static Matrix4		GenerateInverseView(const Camera &c);
 
 	protected:
 		static bool AddCollisionAxis(Vector3 axis, std::vector<Vector3>& collisionAxes);
 		static bool CheckCollisionOnAxis(const OBBVolume& volumeA, const Transform& worldTransformA, const OBBVolume& volumeB, const Transform& worldTransformB, const Vector3& axis, CollisionInfo& collisionInfo);
-		static bool getSeparatingPlane(const Vector3& relativePos, const Vector3& axis, const OBBVolume& volumeA, const OBBVolume& volumeB, const std::vector<Vector3>& axesA, const std::vector<Vector3>& axesB);
 
 private:
 		CollisionDetection()	{}

@@ -207,9 +207,9 @@ void GameTechRenderer::RenderSkybox() {
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 
-	float screenAspect = (float)windowWidth / (float)windowHeight;
+	//float screenAspect = (float)windowWidth / (float)windowHeight;
 	Matrix4 viewMatrix = gameWorld.GetMainCamera()->BuildViewMatrix();
-	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix(screenAspect);
+	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix();
 
 	BindShader(skyboxShader);
 
@@ -253,9 +253,9 @@ void GameTechRenderer::RenderHUD() {
 }
 
 void GameTechRenderer::RenderCamera() {
-	float screenAspect = (float)windowWidth / (float)windowHeight;
+	//float screenAspect = (float)windowWidth / (float)windowHeight;
 	Matrix4 viewMatrix = gameWorld.GetMainCamera()->BuildViewMatrix();
-	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix(screenAspect);
+	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix();
 
 	OGLShader* activeShader = nullptr;
 	int projLocation	= 0;
@@ -265,6 +265,7 @@ void GameTechRenderer::RenderCamera() {
 	int hasVColLocation = 0;
 	int hasTexLocation  = 0;
 	int shadowLocation  = 0;
+	int jointsLocation	= 0;
 
 	int lightPosLocation	= 0;
 	int lightColourLocation = 0;
@@ -300,6 +301,7 @@ void GameTechRenderer::RenderCamera() {
 			lightRadiusLocation = glGetUniformLocation(shader->GetProgramID(), "lightRadius");
 
 			cameraLocation = glGetUniformLocation(shader->GetProgramID(), "cameraPos");
+			jointsLocation = glGetUniformLocation(shader->GetProgramID(), "joints");
 
 			Vector3 camPos = gameWorld.GetMainCamera()->GetPosition();
 			glUniform3fv(cameraLocation, 1, camPos.array);
@@ -338,7 +340,7 @@ void GameTechRenderer::RenderCamera() {
 		if (i->IsRigged()) {
 			vector<Matrix4> frameMatrices;
 			i->GetFrameMatrices(frameMatrices);
-			glUniformMatrix4fv(glGetUniformLocation(shader->GetProgramID(), "joints"), frameMatrices.size(), false, (float*)frameMatrices.data());
+			glUniformMatrix4fv(jointsLocation, frameMatrices.size(), false, (float*)frameMatrices.data());
 		}
 	}
 }
@@ -355,9 +357,9 @@ void GameTechRenderer::NewRenderLines() {
 	if (lines.empty()) {
 		return;
 	}
-	float screenAspect = (float)windowWidth / (float)windowHeight;
+	//float screenAspect = (float)windowWidth / (float)windowHeight;
 	Matrix4 viewMatrix = gameWorld.GetMainCamera()->BuildViewMatrix();
-	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix(screenAspect);
+	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix();
 	
 	Matrix4 viewProj  = projMatrix * viewMatrix;
 

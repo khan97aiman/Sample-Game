@@ -4,6 +4,27 @@
 #include <math.h>
 
 using namespace NCL;
+void Camera::SetBasicCameraParameters(float pitch, float yaw, const Vector3& position, float znear, float zfar) {
+	this->pitch = pitch;
+	this->yaw = yaw;
+	this->position = position;
+	this->znear = znear;
+	this->zfar = zfar;
+}
+void Camera::SetPerspectiveCameraParameters(float aspect, float fov) {
+	this->znear = znear;
+	this->zfar = zfar;
+	this->aspect = aspect;
+	this->fov = fov;
+	camType = CameraType::Perspective;
+}
+void Camera::SetOrthographicCameraParameters(float right, float left, float top, float bottom) {
+	this->right = right;
+	this->left = left;
+	this->top = top;
+	this->bottom = bottom;
+	camType = CameraType::Orthographic;
+}
 /*
 Polls the camera for keyboard / mouse movement.
 Should be done once per frame! Pass it the msec since
@@ -17,8 +38,8 @@ void Camera::UpdateCamera(float dt) {
 	pitch = std::min(pitch, 90.0f);
 	pitch = std::max(pitch, -90.0f);
 
-	CalculateZoom();
-	CalculateAngleAroundPlayer();
+	//CalculateZoom();
+	//CalculateAngleAroundPlayer();
 }
 
 /*
@@ -32,84 +53,93 @@ Matrix4 Camera::BuildViewMatrix() const {
 		Matrix4::Rotation(-pitch, Vector3(1, 0, 0)) *
 		Matrix4::Rotation(-yaw, Vector3(0, 1, 0)) *
 		Matrix4::Translation(-position);
-};
+}
 
-Matrix4 Camera::BuildProjectionMatrix(float currentAspect) const {
+/*
+And here's how we generate an inverse view matrix. It's pretty much
+an exact inversion of the BuildViewMatrix function of the Camera class!
+*/
+Matrix4 Camera::GenerateInverseView() const {
+	Matrix4 iview =
+		Matrix4::Translation(position) *
+		Matrix4::Rotation(yaw, Vector3(0, 1, 0)) *
+		Matrix4::Rotation(pitch, Vector3(1, 0, 0));
+
+	return iview;
+}
+Matrix4 Camera::BuildProjectionMatrix() const {
 	if (camType == CameraType::Orthographic) {
-		return Matrix4::Orthographic(left, right, bottom, top, nearPlane, farPlane);
+		return Matrix4::Orthographic(left, right, bottom, top, znear, zfar);
 	}
-	//else if (camType == CameraType::Perspective) {
-		return Matrix4::Perspective(nearPlane, farPlane, currentAspect, fov);
-	//}
+	else if (camType == CameraType::Perspective) {
+		return Matrix4::Perspective(znear, zfar, aspect, fov);
+	}
 }
+Matrix4 Camera::GenerateInverseProjection() const
+{
+	Matrix4 m;
 
-Camera Camera::BuildPerspectiveCamera(const Vector3& pos, float pitch, float yaw, float fov, float nearPlane, float farPlane) {
-	Camera c;
-	c.camType	= CameraType::Perspective;
-	c.position	= pos;
-	c.pitch		= pitch;
-	c.yaw		= yaw;
-	c.nearPlane = nearPlane;
-	c.farPlane  = farPlane;
+	float t = tan(fov * PI_OVER_360);
 
-	c.fov		= fov;
+	float neg_depth = znear - zfar;
 
-	return c;
+	const float h = 1.0f / t;
+
+	float c = (zfar + znear) / neg_depth;
+	float e = -1.0f;
+	float d = 2.0f * (znear * zfar) / neg_depth;
+
+	m.array[0][0] = aspect / h;
+	m.array[1][1] = tan(fov * PI_OVER_360);
+	m.array[2][2] = 0.0f;
+
+	m.array[2][3] = 1.0f / d;
+
+	m.array[3][2] = 1.0f / e;
+	m.array[3][3] = -c / (d * e);
+
+	return m;
 }
-Camera Camera::BuildOrthoCamera(const Vector3& pos, float pitch, float yaw, float left, float right, float top, float bottom, float nearPlane, float farPlane) {
-	Camera c;
-	c.camType	= CameraType::Orthographic;
-	c.position	= pos;
-	c.pitch		= pitch;
-	c.yaw		= yaw;
-	c.nearPlane = nearPlane;
-	c.farPlane	= farPlane;
+;
 
-	c.left		= left;
-	c.right		= right;
-	c.top		= top;
-	c.bottom	= bottom;
-
-	return c;
-}
-
-void NCL::Camera::CalculateZoom() {
-	float zoomLevel = Window::GetMouse()->GetWheelMovement() * 0.1f;
-	distanceFromPlayer -= zoomLevel;
-}
-
-void NCL::Camera::CalculateAngleAroundPlayer() {
-	angleAroundPlayer -= Window::GetMouse()->GetRelativePosition().x;
-}
-
-float NCL::Camera::CalculateHorizontalDistanceFromPlayer() {
-	return distanceFromPlayer * cos(Maths::DegreesToRadians(pitch));
-}
-
-float NCL::Camera::CalculateVerticalDistanceFromPlayer() {
-	return distanceFromPlayer * sin(Maths::DegreesToRadians(pitch));
-}
-
-void NCL::Camera::CalculateThirdPersonCameraPosition(const Vector3& playerPosition, const Quaternion& playerOrientation, bool init) {
-	float vDist = CalculateVerticalDistanceFromPlayer();
-	float hDist = CalculateHorizontalDistanceFromPlayer();
-
-	float theta = Maths::DegreesToRadians(playerOrientation.ToEuler().y + angleAroundPlayer);
-	float xOffset = hDist * sin(theta);
-	float zOffset = hDist * cos(theta);
-
-	position.x = playerPosition.x - xOffset;
-	position.z = playerPosition.z - zOffset;
-	position.y = playerPosition.y + vDist + 14;
-
-	Vector3 lockedOffset = Vector3(0, 14, distanceFromPlayer);	
-
-	Matrix4 temp = Matrix4::BuildViewMatrix(position, playerPosition, Vector3(0, 1, 0));
-
-	Matrix4 modelMat = temp.Inverse();
-
-	Quaternion q(modelMat);
-	Vector3 angles = q.ToEuler(); 
-	if (init) SetPitch(angles.x);
-	SetYaw(angles.y);
-}
+//
+//void NCL::Camera::CalculateZoom() {
+//	float zoomLevel = Window::GetMouse()->GetWheelMovement() * 0.1f;
+//	distanceFromPlayer -= zoomLevel;
+//}
+//
+//void NCL::Camera::CalculateAngleAroundPlayer() {
+//	angleAroundPlayer -= Window::GetMouse()->GetRelativePosition().x;
+//}
+//
+//float NCL::Camera::CalculateHorizontalDistanceFromPlayer() {
+//	return distanceFromPlayer * cos(Maths::DegreesToRadians(pitch));
+//}
+//
+//float NCL::Camera::CalculateVerticalDistanceFromPlayer() {
+//	return distanceFromPlayer * sin(Maths::DegreesToRadians(pitch));
+//}
+//
+//void NCL::Camera::CalculateThirdPersonCameraPosition(const Vector3& playerPosition, const Quaternion& playerOrientation, bool init) {
+//	float vDist = CalculateVerticalDistanceFromPlayer();
+//	float hDist = CalculateHorizontalDistanceFromPlayer();
+//
+//	float theta = Maths::DegreesToRadians(playerOrientation.ToEuler().y + angleAroundPlayer);
+//	float xOffset = hDist * sin(theta);
+//	float zOffset = hDist * cos(theta);
+//
+//	position.x = playerPosition.x - xOffset;
+//	position.z = playerPosition.z - zOffset;
+//	position.y = playerPosition.y + vDist + 14;
+//
+//	Vector3 lockedOffset = Vector3(0, 14, distanceFromPlayer);	
+//
+//	Matrix4 temp = Matrix4::BuildViewMatrix(position, playerPosition, Vector3(0, 1, 0));
+//
+//	Matrix4 modelMat = temp.Inverse();
+//
+//	Quaternion q(modelMat);
+//	Vector3 angles = q.ToEuler(); 
+//	if (init) SetPitch(angles.x);
+//	SetYaw(angles.y);
+//}

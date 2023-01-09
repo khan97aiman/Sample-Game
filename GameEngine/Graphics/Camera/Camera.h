@@ -18,107 +18,57 @@ namespace NCL {
 		Orthographic,
 		Perspective
 	};
-
 	class Camera {
 	public:
-		Camera(void) {
-			left	= 0;
-			right	= 0;
-			top		= 0;
-			bottom	= 0;
-
-			pitch		= 0.0f;
-			yaw			= 0.0f;
-
-			fov			= 45.0f;
-			nearPlane	= 1.0f;
-			farPlane	= 100.0f;
-
-			camType		= CameraType::Perspective;
-		};
-
-		Camera(float pitch, float yaw, const Vector3& position) : Camera() {
-			this->pitch		= pitch;
-			this->yaw		= yaw;
-			this->position	= position;
-
-			this->fov		= 45.0f;
-			this->nearPlane = 1.0f;
-			this->farPlane	= 100.0f;
-
-			this->camType	= CameraType::Perspective;
-		}
-
+		Camera(void) = default;
+		void SetBasicCameraParameters(float pitch, float yaw, const Vector3& position, float znear = 1.0f, float zfar = 100.0f);
+		void SetPerspectiveCameraParameters(float aspect, float fov = 45.0f);
+		void SetOrthographicCameraParameters(float right, float left, float top, float bottom);
 		~Camera(void) = default;
 
 		void UpdateCamera(float dt);
-
-		float GetFieldOfVision() const {
-			return fov;
-		}
-
-		float GetNearPlane() const {
-			return nearPlane;
-		}
-
-		float GetFarPlane() const {
-			return farPlane;
-		}
-
-		Camera& SetNearPlane(float val) {
-			nearPlane = val;
-			return *this;
-		}
 		
-		Camera& SetFarPlane(float val) {
-			farPlane = val;
-			return *this;
-		}
-
-		//Builds a view matrix for the current camera variables, suitable for sending straight
-		//to a vertex shader (i.e it's already an 'inverse camera matrix').
+		//Builds a view matrix for the current camera variables, suitable for sending straight to a vertex shader (i.e it's already an 'inverse camera matrix').
 		Matrix4 BuildViewMatrix() const;
+		Matrix4 GenerateInverseView() const;
 
-		Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const;
+		virtual Matrix4 BuildProjectionMatrix() const;
+		virtual Matrix4 GenerateInverseProjection() const;
 
 		//Gets position in world space
 		Vector3 GetPosition() const { return position; }
-		//Sets position in world space
-		Camera&	SetPosition(const Vector3& val) { position = val;  return *this; }
-
-		//Gets yaw, in degrees
-		float	GetYaw()   const { return yaw; }
-		//Sets yaw, in degrees
-		Camera&	SetYaw(float y) { yaw = y;  return *this; }
-
-		//Gets pitch, in degrees
-		float	GetPitch() const { return pitch; }
-		//Sets pitch, in degrees
-		Camera& SetPitch(float p) { pitch = p; return *this; }
-
-		static Camera BuildPerspectiveCamera(const Vector3& pos, float pitch, float yaw, float fov, float near, float far);
-		static Camera BuildOrthoCamera(const Vector3& pos, float pitch, float yaw, float left, float right, float top, float bottom, float near, float far);
-
-		void CalculateZoom();
-		void CalculateAngleAroundPlayer();
-		float CalculateHorizontalDistanceFromPlayer();
-		float CalculateVerticalDistanceFromPlayer();
-		void CalculateThirdPersonCameraPosition(const Vector3& playerPosition, const Quaternion& playerOrientation, bool init = false);
+		
+		////Gets yaw, in degrees
+		//float	GetYaw()   const { return yaw; }
+		//
+		////Gets pitch, in degrees
+		//float	GetPitch() const { return pitch; }
+		
+		//void CalculateZoom();
+		//void CalculateAngleAroundPlayer();
+		//float CalculateHorizontalDistanceFromPlayer();
+		//float CalculateVerticalDistanceFromPlayer();
+		//void CalculateThirdPersonCameraPosition(const Vector3& playerPosition, const Quaternion& playerOrientation, bool init = false);
 	protected:
-		CameraType camType;
+		float znear = 1.0f;
+		float zfar = 100.0f;
 
-		float	nearPlane;
-		float	farPlane;
-		float	left;
-		float	right;
-		float	top;
-		float	bottom;
+		float aspect = 0.0f;
+		float fov = 45.0f;
 
-		float	fov;
-		float	yaw;
-		float	pitch;
+		float right = 0.0f;
+		float left = 0.0f;
+		float top = 0.0f;
+		float bottom = 0.0f;
+
+		float	yaw = 0.0f;
+		float	pitch = 0.0f;
 		Vector3 position;
+
+		bool viewType = false;
+		CameraType camType = CameraType::Perspective;
+
 		float distanceFromPlayer = 10.0f;
-		float angleAroundPlayer = 180.0f;
+		/*float angleAroundPlayer = 180.0f; */
 	};
 }
