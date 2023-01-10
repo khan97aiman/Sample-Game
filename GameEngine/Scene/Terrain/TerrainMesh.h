@@ -4,7 +4,7 @@
 namespace NCL {
 	class TerrainMesh: public MeshGeometry  {
 	public:
-		TerrainMesh(int size, const std::string& filename);
+		TerrainMesh(int heightVertexCount, int widthVertexCount, int size);
 		~TerrainMesh(void) {};
 	protected:
 	};
