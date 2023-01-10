@@ -98,11 +98,7 @@ void SampleGame::UpdateGame(float dt) {
 }
 
 void SampleGame::InitCamera() {
-	/*world->GetMainCamera()->SetNearPlane(0.1f);
-	world->GetMainCamera()->SetFarPlane(500.0f);
-	world->GetMainCamera()->CalculateThirdPersonCameraPosition(player->GetTransform().GetPosition(), player->GetTransform().GetOrientation(), true);*/
-
-	world->GetMainCamera()->SetBasicCameraParameters(-15.0f, 315.0f, Vector3(-60, 40, 60));
+	world->GetMainCamera()->SetBasicCameraParameters(-15.0f, 315.0f, Vector3(-60, 40, 60), 0.1f, 500.0f);
 	world->GetMainCamera()->SetFirstPersonCamera(); 
 	world->GetMainCamera()->SetPerspectiveCameraParameters(Window::GetWindow()->GetScreenAspect());
 	lockedObject = nullptr;
