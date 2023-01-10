@@ -11,6 +11,7 @@ https://research.ncl.ac.uk/game/
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Maths.h"
+#include "PlayerBase.h"
 
 namespace NCL {
 	using namespace NCL::Maths;
@@ -18,15 +19,24 @@ namespace NCL {
 		Orthographic,
 		Perspective
 	};
+	enum class ViewType {
+		FirstPerson,
+		ThirdPerson
+	};
 	class Camera {
 	public:
 		Camera(void) = default;
 		void SetBasicCameraParameters(float pitch, float yaw, const Vector3& position, float znear = 1.0f, float zfar = 100.0f);
+		void SetFirstPersonCamera();
+		void SetThirdPersonCamera(PlayerBase* player, float angleAroundPlayer = 180.0f, float distanceFromPlayer = 10.0f);
 		void SetPerspectiveCameraParameters(float aspect, float fov = 45.0f);
 		void SetOrthographicCameraParameters(float right, float left, float top, float bottom);
 		~Camera(void) = default;
 
 		void UpdateCamera(float dt);
+
+		void CalculateFirstPersonView();
+		void CalculateThirdPersonView(bool init = false);
 		
 		//Builds a view matrix for the current camera variables, suitable for sending straight to a vertex shader (i.e it's already an 'inverse camera matrix').
 		Matrix4 BuildViewMatrix() const;
@@ -37,18 +47,6 @@ namespace NCL {
 
 		//Gets position in world space
 		Vector3 GetPosition() const { return position; }
-		
-		////Gets yaw, in degrees
-		//float	GetYaw()   const { return yaw; }
-		//
-		////Gets pitch, in degrees
-		//float	GetPitch() const { return pitch; }
-		
-		//void CalculateZoom();
-		//void CalculateAngleAroundPlayer();
-		//float CalculateHorizontalDistanceFromPlayer();
-		//float CalculateVerticalDistanceFromPlayer();
-		//void CalculateThirdPersonCameraPosition(const Vector3& playerPosition, const Quaternion& playerOrientation, bool init = false);
 	protected:
 		float znear = 1.0f;
 		float zfar = 100.0f;
@@ -65,10 +63,12 @@ namespace NCL {
 		float	pitch = 0.0f;
 		Vector3 position;
 
-		bool viewType = false;
+		ViewType viewType = ViewType::ThirdPerson;
 		CameraType camType = CameraType::Perspective;
 
+		//third person camera params
 		float distanceFromPlayer = 10.0f;
-		/*float angleAroundPlayer = 180.0f; */
+		float angleAroundPlayer = 180.0f; 
+		PlayerBase* player = NULL;
 	};
 }

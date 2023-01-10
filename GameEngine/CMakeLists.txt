@@ -169,6 +169,7 @@ source_group("Physics\\Collision Detection" FILES ${Physics_Collision_Detection}
 set(Scene
     "./Scene/GameWorld.h"
     "./Scene/GameWorld.cpp" 
+    "./Scene/PlayerBase.h"
 )
 source_group("Scene" FILES ${Scene})
 
