@@ -16,7 +16,7 @@ namespace NCL::Maths {
 	public:
 		Matrix2(void);
 		Matrix2(float elements[4]);
-
+		Matrix2(const Vector2& a, const Vector2& b);
 		~Matrix2(void) = default;
 
 		void ToZero();
@@ -67,6 +67,9 @@ namespace NCL::Maths {
 
 		//Handy string output for the matrix. Can get a bit messy, but better than nothing!
 		inline friend std::ostream& operator<<(std::ostream& o, const Matrix2& m);
+
+		void Invert();
+		Matrix2 Inverse() const;
 	};
 
 	//Handy string output for the matrix. Can get a bit messy, but better than nothing!

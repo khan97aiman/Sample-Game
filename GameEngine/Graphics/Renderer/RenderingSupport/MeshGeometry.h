@@ -11,6 +11,7 @@ https://research.ncl.ac.uk/game/
 #include <string>
 
 #include "Vector3.h"
+#include "Matrix2.h"
 
 using std::vector;
 
@@ -20,7 +21,6 @@ namespace NCL {
 		class Vector3;
 		class Vector4;
 		class Matrix4;
-
 		class Vector4i;
 	}
 	namespace Rendering {
@@ -132,6 +132,7 @@ namespace NCL {
 
 		bool GetTriangle(unsigned int i, Vector3& a, Vector3& b, Vector3& c) const;
 		bool GetNormalForTri(unsigned int i, Vector3& n) const;
+		bool GetTangentForTri(unsigned int i, Vector4& t) const;
 		bool HasTriangle(unsigned int i) const;
 
 		const vector<Vector3>&		GetPositionData()		const { return positions;	}
@@ -166,6 +167,8 @@ namespace NCL {
 
 		void	TransformVertices(const Matrix4& byMatrix);
 
+		void CalculateNormals();
+		void CalculateTangents();
 		void RecalculateNormals();
 		void RecalculateTangents();
 
@@ -188,6 +191,10 @@ namespace NCL {
 		bool	GetVertexIndicesForTri(unsigned int i, unsigned int& a, unsigned int& b, unsigned int& c) const;
 
 		virtual bool ValidateMeshData();
+		unsigned int GetTriCount() const {
+			int primCount = indices.size() ? indices.size() : positions.size();
+			return primCount / 3;
+		}
 
 		std::string			debugName; //used when an API allows setting debug tags
 		GeometryPrimitive	primType;

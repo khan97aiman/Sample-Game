@@ -173,6 +173,14 @@ set(Scene
 )
 source_group("Scene" FILES ${Scene})
 
+set(Scene_Terrain
+    "./Scene/Terrain/Terrain.h"
+    "./Scene/Terrain/Terrain.cpp" 
+    "./Scene/Terrain/TerrainMesh.h"
+    "./Scene/Terrain/TerrainMesh.cpp" 
+)
+source_group("Scene\\Terrain" FILES ${Scene_Terrain})
+
 set(Windowing_and_Input
     "./WindowingAndInput/GameTimer.cpp"
     "./WindowingAndInput/GameTimer.h"
@@ -213,6 +221,7 @@ set(ALL_FILES
     ${Physics}
     ${Physics_Collision_Detection}
     ${Scene}
+    ${Scene_Terrain}
     ${Windowing_and_Input}
     ${Windowing_and_Input__Win32}
 )
@@ -280,6 +289,7 @@ include_directories("WindowingAndInput/Win32/")
 include_directories("Physics/")
 include_directories("Physics/CollisionDetection/")
 include_directories("Scene/")
+include_directories("Scene/Terrain")
 include_directories("../Networking/")
 include_directories("Graphics/Renderer/")
 include_directories("Graphics/Renderer/RenderingSupport/")

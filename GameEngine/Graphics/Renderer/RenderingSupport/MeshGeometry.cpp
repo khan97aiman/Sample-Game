@@ -281,8 +281,71 @@ bool MeshGeometry::GetNormalForTri(unsigned int i, Vector3& n) const {
 	return true;
 }
 
+bool MeshGeometry::GetTangentForTri(unsigned int i, Vector4& t) const {
+	Vector3 a, b, c;
+
+	bool hasTri = GetTriangle(i, a, b, c);
+	if (!hasTri) {
+		return false;
+	}
+
+	Vector3 ba = b - a;
+	Vector3 ca = c - a;
+
+	unsigned int ai, bi, ci;
+	GetVertexIndicesForTri(i, ai, bi, ci);
+	Vector2 tba = texCoords[bi] - texCoords[ai];
+	Vector2 tca = texCoords[ci] - texCoords[ai];
+	
+	Matrix2 texMatrix = Matrix2(tba, tca);
+	texMatrix.Invert();
+	Vector3 tangent;
+	Vector3 binormal;
+	tangent = ba * texMatrix.array[0][0] + ca * texMatrix.array[0][1];
+	binormal = ba * texMatrix.array[1][0] + ca * texMatrix.array[1][1];
+	Vector3 normal = Vector3::Cross(ba, ca);
+	Vector3 biCross = Vector3::Cross(tangent, normal);
+	float handedness = 1.0f;
+	if (Vector3::Dot(biCross, binormal) < 0.0f) {
+		handedness = -1.0f;
+	}
+
+	t.x = tangent.x;
+	t.y = tangent.y;
+	t.z = tangent.z;
+	t.w = handedness;
+
+	float handedness_ = tangents[i].w > 0.0f ? 1.0f : -1.0f;
+	t.w = 0.0f;
+	t.Normalise();
+	t.w = handedness_;
+
+}
+
 void	MeshGeometry::TransformVertices(const Matrix4& byMatrix) {
 
+}
+
+void MeshGeometry::CalculateNormals() {
+	int triCount = GetTriCount();
+	for (int i = 0; i < triCount; ++i) {
+		Vector3 normal;
+		GetNormalForTri(i, normal);
+		normals.emplace_back(normal);
+		normals.emplace_back(normal);
+		normals.emplace_back(normal);
+	}
+}
+
+void MeshGeometry::CalculateTangents() {
+	int triCount = GetTriCount();
+	for (int i = 0; i < triCount; ++i) {
+		Vector4 tangent;
+		GetTangentForTri(i, tangent);
+		tangents.emplace_back(tangent);
+		tangents.emplace_back(tangent);
+		tangents.emplace_back(tangent);
+	}
 }
 
 void	MeshGeometry::RecalculateNormals() {
