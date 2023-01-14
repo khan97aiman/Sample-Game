@@ -18,21 +18,21 @@ MeshGeometry::MeshGeometry()
 }
 
 enum class GeometryChunkTypes {
-	VPositions		= 1 << 0, //1
-	VNormals		= 1 << 1, //2
-	VTangents		= 1 << 2, //4
-	VColors			= 1 << 3, //8
-	VTex0			= 1 << 4, //16
-	VTex1			= 1 << 5, //32
-	VWeightValues	= 1 << 6, //64
-	VWeightIndices	= 1 << 7, //128
-	Indices			= 1 << 8, //256
-	JointNames		= 1 << 9, //512
-	JointParents	= 1 << 10, //1024
-	BindPose		= 1 << 11, //2048
-	BindPoseInv		= 1 << 12, //4096
-	Material		= 1 << 13, //8192
-	SubMeshes		= 1 << 14, //16384
+	VPositions		= 1 << 0,		//1
+	VNormals		= 1 << 1,		//2
+	VTangents		= 1 << 2,		//4
+	VColors			= 1 << 3,		//8
+	VTex0			= 1 << 4,		//16
+	VTex1			= 1 << 5,		//32
+	VWeightValues	= 1 << 6,		//64
+	VWeightIndices	= 1 << 7,		//128
+	Indices			= 1 << 8,		//256
+	JointNames		= 1 << 9,		//512
+	JointParents	= 1 << 10,		//1024
+	BindPose		= 1 << 11,		//2048
+	BindPoseInv		= 1 << 12,		//4096
+	Material		= 1 << 13,		//8192
+	SubMeshes		= 1 << 14,		//16384
 	SubMeshNames	= 1 << 15,
 	BindPoseIndices = 1 << 16,
 	BindPoseStates	= 1 << 17,
