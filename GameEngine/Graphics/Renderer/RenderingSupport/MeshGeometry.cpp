@@ -18,21 +18,21 @@ MeshGeometry::MeshGeometry()
 }
 
 enum class GeometryChunkTypes {
-	VPositions		= 1 << 0,
-	VNormals		= 1 << 1,
-	VTangents		= 1 << 2,
-	VColors			= 1 << 3,
-	VTex0			= 1 << 4,
-	VTex1			= 1 << 5,
-	VWeightValues	= 1 << 6,
-	VWeightIndices	= 1 << 7,
-	Indices			= 1 << 8,
-	JointNames		= 1 << 9,
-	JointParents	= 1 << 10,
-	BindPose		= 1 << 11,
-	BindPoseInv		= 1 << 12,
-	Material		= 1 << 13,
-	SubMeshes		= 1 << 14,
+	VPositions		= 1 << 0, //1
+	VNormals		= 1 << 1, //2
+	VTangents		= 1 << 2, //4
+	VColors			= 1 << 3, //8
+	VTex0			= 1 << 4, //16
+	VTex1			= 1 << 5, //32
+	VWeightValues	= 1 << 6, //64
+	VWeightIndices	= 1 << 7, //128
+	Indices			= 1 << 8, //256
+	JointNames		= 1 << 9, //512
+	JointParents	= 1 << 10, //1024
+	BindPose		= 1 << 11, //2048
+	BindPoseInv		= 1 << 12, //4096
+	Material		= 1 << 13, //8192
+	SubMeshes		= 1 << 14, //16384
 	SubMeshNames	= 1 << 15,
 	BindPoseIndices = 1 << 16,
 	BindPoseStates	= 1 << 17,
@@ -315,7 +315,7 @@ bool MeshGeometry::GetTangentForTri(unsigned int i, Vector4& t) const {
 	t.z = tangent.z;
 	t.w = handedness;
 
-	float handedness_ = tangents[i].w > 0.0f ? 1.0f : -1.0f;
+	float handedness_ = t.w > 0.0f ? 1.0f : -1.0f;
 	t.w = 0.0f;
 	t.Normalise();
 	t.w = handedness_;

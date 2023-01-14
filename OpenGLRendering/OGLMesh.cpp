@@ -36,6 +36,78 @@ OGLMesh::OGLMesh(const std::string&filename) : MeshGeometry(filename){
 	indexBuffer = 0;
 }
 
+OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount, int size) {
+	OGLMesh* m = new OGLMesh();
+	m->primType = Triangles;
+
+	for (int z = 0; z < hVertexCount; ++z) {
+		for (int x = 0; x < wVertexCount; ++x) {
+			m->positions.emplace_back(Vector3((float)x / ((float)wVertexCount - 1) * size, 0, (float)z / ((float)hVertexCount - 1) * size));
+			m->texCoords.emplace_back(Vector2((float)x / ((float)wVertexCount - 1), (float)z / ((float)hVertexCount - 1)));
+		}
+	}
+
+	int i = 0;
+	for (int z = 0; z < hVertexCount - 1; ++z) {
+		for (int x = 0; x < wVertexCount - 1; ++x) {
+			int a = (z * (wVertexCount)) + x;
+			int b = (z * (wVertexCount)) + (x + 1);
+			int c = ((z + 1) * (wVertexCount)) + (x + 1);
+			int d = ((z + 1) * (wVertexCount)) + x;
+			m->indices.emplace_back(a);
+			m->indices.emplace_back(c);
+			m->indices.emplace_back(b);
+			m->indices.emplace_back(c);
+			m->indices.emplace_back(a);
+			m->indices.emplace_back(d);
+		}
+	}
+	
+	m->AddSubMesh(0, (wVertexCount - 1) * (hVertexCount - 1) * 6, 0);
+	/*m->positions.emplace_back(Vector3(-0.5f, 0, -0.5f));
+	m->positions.emplace_back(Vector3(0.5f, 0, -0.5f));
+	m->positions.emplace_back(Vector3(1.0f, 0, -0.5f));
+	m->positions.emplace_back(Vector3(-0.5f, 0, 0.5f));
+	m->positions.emplace_back(Vector3(0.5f, 0, 0.5f));
+	m->positions.emplace_back(Vector3(1.0f, 0, 0.5f));
+
+
+	/*m->texCoords.emplace_back(Vector2(0.0f, 1.0f));
+	m->texCoords.emplace_back(Vector2(0.0f, 0.0f));
+	m->texCoords.emplace_back(Vector2(1.0f, 1.0f));
+	m->texCoords.emplace_back(Vector2(1.0f, 0.0f));
+
+
+	m->indices.emplace_back(0);
+	m->indices.emplace_back(4);
+	m->indices.emplace_back(1);
+	m->indices.emplace_back(4);
+	m->indices.emplace_back(0);
+	m->indices.emplace_back(3);
+
+	m->indices.emplace_back(1);
+	m->indices.emplace_back(5);
+	m->indices.emplace_back(2);
+	m->indices.emplace_back(5);
+	m->indices.emplace_back(1);
+	m->indices.emplace_back(4);
+
+	m->AddSubMesh(0, 12, 0);
+
+	*/
+	//for (int i = 0; i < 4; ++i) {
+	//	m->colours.emplace_back(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	//	m->normals.emplace_back(Vector3(0.0f, 0.0f, -1.0f)); //New!
+	//	m->tangents.emplace_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f)); //New!
+	//}
+	
+	//m->CalculateNormals();
+	//m->CalculateTangents();
+
+	m->UploadToGPU();
+	return m;
+}
+
 
 OGLMesh* OGLMesh::GenerateQuad() {
 	OGLMesh* m = new OGLMesh();

@@ -176,8 +176,6 @@ source_group("Scene" FILES ${Scene})
 set(Scene_Terrain
     "./Scene/Terrain/Terrain.h"
     "./Scene/Terrain/Terrain.cpp" 
-    "./Scene/Terrain/TerrainMesh.h"
-    "./Scene/Terrain/TerrainMesh.cpp" 
 )
 source_group("Scene\\Terrain" FILES ${Scene_Terrain})
 

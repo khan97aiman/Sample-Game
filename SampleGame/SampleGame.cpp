@@ -1,4 +1,5 @@
 #include "SampleGame.h"
+#include <Terrain.h>
 
 using namespace NCL;
 using namespace CSC8503;
@@ -35,6 +36,8 @@ void SampleGame::InitialiseAssets() {
 	meshes.insert(std::make_pair("enemyMesh", renderer->LoadMesh("Keeper.msh")));
 	meshes.insert(std::make_pair("coinMesh", renderer->LoadMesh("coin.msh")));
 	meshes.insert(std::make_pair("capsuleMesh", renderer->LoadMesh("capsule.msh")));
+	MeshGeometry* terrainMesh = OGLMesh::GenerateFlatMesh();
+	meshes.insert(std::make_pair("terrainMesh", terrainMesh));
 
 	meshMaterials.insert(std::make_pair("goatMat", new MeshMaterial("goat.mat")));
 	//meshMaterials.at("goatMat")->LoadTextures();
@@ -109,10 +112,12 @@ void SampleGame::InitWorld() {
 	physics->Clear();
 	if (!hedgeMaze) delete hedgeMaze;
 
-	InitMixedGridWorld(15, 15, 3.5f, 3.5f);
+	//InitMixedGridWorld(1, 1, 3.5f, 3.5f);
 	remainingTime = 2 * 60;
+	GameObject* g = new Terrain(Vector2(), meshes.at("terrainMesh"), textures.at("basicTex"), shaders.at("basicShader"));
+	world->AddGameObject(g);
 	//InitGameExamples();
-	InitDefaultFloor();
+	//InitDefaultFloor();
 	//testStateObject = AddStateObjectToWorld(Vector3(15, 10, 0));
 	//AddNavigationGrid();
 }
