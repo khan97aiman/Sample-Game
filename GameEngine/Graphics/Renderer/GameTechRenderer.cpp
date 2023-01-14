@@ -352,6 +352,10 @@ MeshGeometry* GameTechRenderer::LoadMesh(const string& name) {
 	return mesh;
 }
 
+MeshGeometry* GameTechRenderer::LoadFlatMesh() {
+	return OGLMesh::GenerateFlatMesh();
+}
+
 void GameTechRenderer::NewRenderLines() {
 	const std::vector<Debug::DebugLineEntry>& lines = Debug::GetDebugLines();
 	if (lines.empty()) {

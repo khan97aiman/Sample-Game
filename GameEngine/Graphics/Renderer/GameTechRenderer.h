@@ -20,6 +20,7 @@ namespace NCL {
 			~GameTechRenderer();
 
 			MeshGeometry*	LoadMesh(const string& name);
+			MeshGeometry* LoadFlatMesh();
 			TextureBase*	LoadTexture(const string& name);
 			ShaderBase*		LoadShader(const string& vertex, const string& fragment);
 			void AddHudTextures(const string& name, const Vector2& position, const Vector2& scale);
