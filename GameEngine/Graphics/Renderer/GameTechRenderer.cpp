@@ -134,7 +134,9 @@ void GameTechRenderer::RenderFrame() {
 	SortObjectList();
 	RenderShadowMap();
 	RenderSkybox();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	RenderCamera();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	RenderHUD();
 	glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
 	glDisable(GL_BLEND);

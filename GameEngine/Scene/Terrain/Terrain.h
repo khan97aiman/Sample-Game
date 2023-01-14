@@ -13,7 +13,7 @@ namespace NCL {
 
 	class Terrain: public GameObject {
 	public:
-		Terrain(Vector2 gridPosition, MeshGeometry* mesh, TextureBase* texture, ShaderBase* shader);
+		Terrain(Vector2 gridPosition, MeshGeometry* mesh, TextureBase* texture, ShaderBase* shader, int size = 200);
 		~Terrain(void) {
 		};
 	protected:

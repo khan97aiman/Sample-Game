@@ -113,8 +113,10 @@ void SampleGame::InitWorld() {
 
 	//InitMixedGridWorld(1, 1, 3.5f, 3.5f);
 	remainingTime = 2 * 60;
-	GameObject* g = new Terrain(Vector2(), meshes.at("terrainMesh"), textures.at("basicTex"), shaders.at("basicShader"));
-	world->AddGameObject(g);
+
+	world->AddGameObject(new Terrain(Vector2(), meshes.at("terrainMesh"), textures.at("basicTex"), shaders.at("basicShader")));
+	world->AddGameObject(new Terrain(Vector2(0, 1), meshes.at("terrainMesh"), textures.at("basicTex"), shaders.at("basicShader")));
+
 	//InitGameExamples();
 	//InitDefaultFloor();
 	//testStateObject = AddStateObjectToWorld(Vector3(15, 10, 0));
