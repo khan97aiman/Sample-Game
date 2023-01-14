@@ -322,29 +322,73 @@ bool MeshGeometry::GetTangentForTri(unsigned int i, Vector4& t) const {
 
 }
 
+Vector4 MeshGeometry::GetTangent(int a, int b, int c) {
+	Vector3 ba = positions[b] - positions[a];
+	Vector3 ca = positions[c] - positions[a];
+	Vector2 tba = texCoords[b] - texCoords[a];
+	Vector2 tca = texCoords[c] - texCoords[a];
+	Matrix2 texMatrix = Matrix2(tba, tca);
+	texMatrix.Invert();
+	Vector3 tangent;
+	Vector3 binormal;
+	tangent = ba * texMatrix.array[0][0] + ca * texMatrix.array[0][1];
+	binormal = ba * texMatrix.array[1][0] + ca * texMatrix.array[1][1];
+	Vector3 normal = Vector3::Cross(ba, ca);
+	Vector3 biCross = Vector3::Cross(tangent, normal);
+	float handedness = 1.0f;
+	if (Vector3::Dot(biCross, binormal) < 0.0f) {
+		handedness = -1.0f;
+	}
+
+	Vector4 t(tangent.x, tangent.y, tangent.z, handedness);
+
+	float handedness_ = t.w > 0.0f ? 1.0f : -1.0f;
+	t.w = 0.0f;
+	t.Normalise();
+	t.w = handedness_;
+	return t;
+}
+
 void	MeshGeometry::TransformVertices(const Matrix4& byMatrix) {
 
 }
 
 void MeshGeometry::CalculateNormals() {
 	int triCount = GetTriCount();
+
+	for (size_t i = 0; i < positions.size(); i++) {
+		normals.emplace_back(Vector3());
+	}
+
 	for (int i = 0; i < triCount; ++i) {
-		Vector3 normal;
-		GetNormalForTri(i, normal);
-		normals.emplace_back(normal);
-		normals.emplace_back(normal);
-		normals.emplace_back(normal);
+		unsigned int a = 0;
+		unsigned int b = 0;
+		unsigned int c = 0;
+		GetVertexIndicesForTri(i, a, b, c);
+		Vector3 normal = Vector3::Cross((positions[b] - positions[a]), (positions[c] - positions[a]));
+		normal.Normalise();
+		normals[a] += normal;
+		normals[b] += normal;
+		normals[c] += normal;
 	}
 }
 
 void MeshGeometry::CalculateTangents() {
 	int triCount = GetTriCount();
+
+	for (size_t i = 0; i < positions.size(); i++) {
+		tangents.emplace_back(Vector4());
+	}
+
 	for (int i = 0; i < triCount; ++i) {
-		Vector4 tangent;
-		GetTangentForTri(i, tangent);
-		tangents.emplace_back(tangent);
-		tangents.emplace_back(tangent);
-		tangents.emplace_back(tangent);
+		unsigned int a = 0;
+		unsigned int b = 0;
+		unsigned int c = 0;
+		GetVertexIndicesForTri(i, a, b, c);
+		Vector4 tangent = GetTangent(a, b, c);
+		tangents[a] += tangent;
+		tangents[b] += tangent;
+		tangents[c] += tangent;
 	}
 }
 

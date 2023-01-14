@@ -101,8 +101,8 @@ OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount, int size)
 	//	m->tangents.emplace_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f)); //New!
 	//}
 	
-	//m->CalculateNormals();
-	//m->CalculateTangents();
+	m->CalculateNormals();
+	m->CalculateTangents();
 
 	m->UploadToGPU();
 	return m;

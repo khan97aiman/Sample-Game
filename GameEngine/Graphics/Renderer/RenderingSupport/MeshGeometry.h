@@ -133,6 +133,7 @@ namespace NCL {
 		bool GetTriangle(unsigned int i, Vector3& a, Vector3& b, Vector3& c) const;
 		bool GetNormalForTri(unsigned int i, Vector3& n) const;
 		bool GetTangentForTri(unsigned int i, Vector4& t) const;
+		Vector4 GetTangent(int a, int b, int c);
 		bool HasTriangle(unsigned int i) const;
 
 		const vector<Vector3>&		GetPositionData()		const { return positions;	}
