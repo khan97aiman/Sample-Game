@@ -64,43 +64,6 @@ OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount, int size)
 	}
 	
 	m->AddSubMesh(0, (wVertexCount - 1) * (hVertexCount - 1) * 6, 0);
-	/*m->positions.emplace_back(Vector3(-0.5f, 0, -0.5f));
-	m->positions.emplace_back(Vector3(0.5f, 0, -0.5f));
-	m->positions.emplace_back(Vector3(1.0f, 0, -0.5f));
-	m->positions.emplace_back(Vector3(-0.5f, 0, 0.5f));
-	m->positions.emplace_back(Vector3(0.5f, 0, 0.5f));
-	m->positions.emplace_back(Vector3(1.0f, 0, 0.5f));
-
-
-	/*m->texCoords.emplace_back(Vector2(0.0f, 1.0f));
-	m->texCoords.emplace_back(Vector2(0.0f, 0.0f));
-	m->texCoords.emplace_back(Vector2(1.0f, 1.0f));
-	m->texCoords.emplace_back(Vector2(1.0f, 0.0f));
-
-
-	m->indices.emplace_back(0);
-	m->indices.emplace_back(4);
-	m->indices.emplace_back(1);
-	m->indices.emplace_back(4);
-	m->indices.emplace_back(0);
-	m->indices.emplace_back(3);
-
-	m->indices.emplace_back(1);
-	m->indices.emplace_back(5);
-	m->indices.emplace_back(2);
-	m->indices.emplace_back(5);
-	m->indices.emplace_back(1);
-	m->indices.emplace_back(4);
-
-	m->AddSubMesh(0, 12, 0);
-
-	*/
-	//for (int i = 0; i < 4; ++i) {
-	//	m->colours.emplace_back(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	//	m->normals.emplace_back(Vector3(0.0f, 0.0f, -1.0f)); //New!
-	//	m->tangents.emplace_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f)); //New!
-	//}
-	
 	m->CalculateNormals();
 	m->CalculateTangents();
 
