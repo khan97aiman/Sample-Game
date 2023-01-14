@@ -50,6 +50,7 @@ void SampleGame::InitialiseAssets() {
 
 
 	shaders.insert(std::make_pair("basicShader", renderer->LoadShader("scene.vert", "scene.frag")));
+	shaders.insert(std::make_pair("terrainShader", renderer->LoadShader("terrain.vert", "terrain.frag")));
 	shaders.insert(std::make_pair("skinningShader", renderer->LoadShader("skinning.vert", "scene.frag")));
 
 	//renderer->AddHudTextures("wolf_color.png", Vector2(0.5,0.5), Vector2(0.25,0.25));
@@ -114,8 +115,8 @@ void SampleGame::InitWorld() {
 	//InitMixedGridWorld(1, 1, 3.5f, 3.5f);
 	remainingTime = 2 * 60;
 
-	world->AddGameObject(new Terrain(Vector2(), meshes.at("terrainMesh"), textures.at("basicTex"), shaders.at("basicShader")));
-	world->AddGameObject(new Terrain(Vector2(0, 1), meshes.at("terrainMesh"), textures.at("basicTex"), shaders.at("basicShader")));
+	world->AddGameObject(new Terrain(Vector2(), meshes.at("terrainMesh"), textures.at("grassTex"), shaders.at("terrainShader")));
+	world->AddGameObject(new Terrain(Vector2(0, 1), meshes.at("terrainMesh"), textures.at("grassTex"), shaders.at("terrainShader")));
 
 	//InitGameExamples();
 	//InitDefaultFloor();

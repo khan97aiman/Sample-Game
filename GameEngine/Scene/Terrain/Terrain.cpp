@@ -13,7 +13,7 @@ Terrain::Terrain(Vector2 gridPosition, MeshGeometry* mesh, TextureBase* texture,
 	transform.SetScale(Vector3(size, 0, size));
 	name = "terrain";
 	renderObject = new RenderObject(&transform, mesh, texture, shader);
-	renderObject->SetColour(Vector4(1, 1, 0, 1));
+	//renderObject->SetColour(Vector4(1, 1, 0, 1));
 	float inverseMass = 0.0f;
 	physicsObject = new PhysicsObject(&transform, NULL);
 	physicsObject->SetInverseMass(inverseMass);
