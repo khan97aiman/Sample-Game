@@ -5,6 +5,7 @@
 #include "ShaderBase.h"
 #include "MeshAnimation.h"
 #include "MeshGeometry.h"
+#include <map>
 
 
 namespace NCL {
@@ -18,7 +19,7 @@ namespace NCL {
 		class RenderObject
 		{
 		public:
-			RenderObject(Transform* parentTransform, MeshGeometry* mesh, TextureBase* tex, ShaderBase* shader);
+			RenderObject(Transform* parentTransform, MeshGeometry* mesh, ShaderBase* shader);
 			~RenderObject();
 
 			/*void SetDefaultTexture(TextureBase* t) {
@@ -29,12 +30,20 @@ namespace NCL {
 				return texture;
 			}*/
 
-			void AddTexture(TextureBase* t) {
-				if (t) textures.emplace_back(t);
+			void AddTexture(int subMeshIndex, TextureBase* t, std::string uniform) {
+				if (t) {
+					if (subMeshTextures.count(subMeshIndex)) {
+						//if this submesh pair already exists, add to the inner map
+						subMeshTextures.at(subMeshIndex).push_back(std::make_pair(uniform, t));
+					}
+					else {
+						subMeshTextures.insert(std::make_pair(subMeshIndex, std::vector<std::pair<std::string, TextureBase*>>{std::make_pair(uniform, t)}));
+					}
+				}
 			}
 
-			std::vector<TextureBase*> GetTextures() const {
-				return textures;
+			std::vector<std::pair<std::string, TextureBase*>> GetTextures(int subMeshIndex) const {
+				return subMeshTextures.at(subMeshIndex);
 			}
 
 			MeshGeometry*	GetMesh() const {
@@ -80,7 +89,9 @@ namespace NCL {
 			float frameTime = 0.0f;
 		protected:
 			MeshGeometry*	mesh;
-			std::vector<TextureBase*>	textures;
+			std::map<int, std::vector<std::pair<std::string, TextureBase*>>> subMeshTextures;
+
+			//std::vector<TextureBase*>	textures;
 			ShaderBase*		shader;
 			Transform*		transform;
 			Vector4			colour;

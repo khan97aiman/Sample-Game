@@ -32,7 +32,7 @@ void main(void)
 	OUT.worldPos 	= ( modelMatrix * vec4 ( position ,1)). xyz ;
 	OUT.normal 		= normalize ( normalMatrix * normalize ( normal ));
 	
-	OUT.texCoord	= texCoord * 2;
+	OUT.texCoord	= texCoord;
 	OUT.colour		= objectColour;
 
 	if(hasVertexColours) {

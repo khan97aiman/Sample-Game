@@ -1,8 +1,13 @@
 #version 400 core
 
 uniform vec4 		objectColour;
-uniform sampler2D 	mainTex;
 uniform sampler2DShadow shadowTex;
+
+uniform sampler2D 	splatMapTex;
+uniform sampler2D 	rTex;
+uniform sampler2D 	gTex;
+uniform sampler2D 	bTex;
+uniform sampler2D 	bgTex;
 
 uniform vec3	lightPos;
 uniform float	lightRadius;
@@ -25,6 +30,16 @@ out vec4 fragColor;
 
 void main(void)
 {
+	vec4 splatMapColor = texture(splatMapTex, IN.texCoord); //what is the color value on the splatmap
+	vec2 tiledTexCoord = IN.texCoord * 10;
+	
+	vec4 rTexColor 		= texture(rTex, tiledTexCoord) * splatMapColor.r;
+	vec4 gTexColor 		= texture(gTex, tiledTexCoord) * splatMapColor.g;
+	vec4 bTexColor 		= texture(bTex, tiledTexCoord) * splatMapColor.b;
+	vec4 bgTexColor 	= texture(bgTex, tiledTexCoord) * (1 - (splatMapColor.r + splatMapColor.g + splatMapColor.b));
+
+	vec4 finalTexColor = bgTexColor + rTexColor + gTexColor + bTexColor;
+
 	float shadow = 1.0; // New !
 	
 	if( IN . shadowProj . w > 0.0) { // New !
@@ -39,12 +54,11 @@ void main(void)
 
 	float rFactor = max (0.0 , dot ( halfDir , IN.normal ));
 	float sFactor = pow ( rFactor , 1000000.0 );
+
+	//fragColor = finalTexColor;
 	
 	vec4 albedo = IN.colour;
-	
-	if(hasTexture) {
-	 albedo *= texture(mainTex, IN.texCoord);
-	}
+	albedo *= finalTexColor;
 	
 	albedo.rgb = pow(albedo.rgb, vec3(2.2));
 	
@@ -57,12 +71,4 @@ void main(void)
 	fragColor.rgb = pow(fragColor.rgb, vec3(1.0 / 2.2f));
 	
 	fragColor.a = albedo.a;
-
-//fragColor.rgb = IN.normal;
-
-	//fragColor = IN.colour;
-	
-	//fragColor.xy = IN.texCoord.xy;
-	
-	//fragColor = IN.colour;
 }

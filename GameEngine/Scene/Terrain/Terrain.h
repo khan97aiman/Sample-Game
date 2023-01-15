@@ -5,6 +5,7 @@
 #include "MeshGeometry.h"
 #include "TextureBase.h"
 #include "ShaderBase.h"
+#include "TerrainTexturePack.h"
 
 namespace NCL {
 	using namespace Maths;
@@ -13,7 +14,7 @@ namespace NCL {
 
 	class Terrain: public GameObject {
 	public:
-		Terrain(Vector2 gridPosition, MeshGeometry* mesh, TextureBase* texture, ShaderBase* shader, int size = 200);
+		Terrain(Vector2 gridPosition, MeshGeometry* mesh, TerrainTexturePack texturePack, ShaderBase* shader, int size = 200);
 		~Terrain(void) {
 		};
 	protected:

@@ -48,6 +48,12 @@ void SampleGame::InitialiseAssets() {
 	textures.insert(std::make_pair("goatTex", renderer->LoadTexture("goat1.jpg")));
 	textures.insert(std::make_pair("doorTex", renderer->LoadTexture("door.jpg")));
 
+	textures.insert(std::make_pair("terrainSplatMap", renderer->LoadTexture("Terrain/splatmap.png")));
+	textures.insert(std::make_pair("terrainRTex", renderer->LoadTexture("Terrain/rTex_mud.jpg")));
+	textures.insert(std::make_pair("terrainGTex", renderer->LoadTexture("Terrain/gTex_mudGrass.jpg")));
+	textures.insert(std::make_pair("terrainBTex", renderer->LoadTexture("Terrain/bTex_path.jpg")));
+	textures.insert(std::make_pair("terrainBgTex", renderer->LoadTexture("Terrain/bgTex_grass.jpg")));
+
 
 	shaders.insert(std::make_pair("basicShader", renderer->LoadShader("scene.vert", "scene.frag")));
 	shaders.insert(std::make_pair("terrainShader", renderer->LoadShader("terrain.vert", "terrain.frag")));
@@ -115,8 +121,9 @@ void SampleGame::InitWorld() {
 	//InitMixedGridWorld(1, 1, 3.5f, 3.5f);
 	remainingTime = 2 * 60;
 
-	world->AddGameObject(new Terrain(Vector2(), meshes.at("terrainMesh"), textures.at("grassTex"), shaders.at("terrainShader")));
-	world->AddGameObject(new Terrain(Vector2(0, 1), meshes.at("terrainMesh"), textures.at("grassTex"), shaders.at("terrainShader")));
+	TerrainTexturePack terrainTexturePack(textures.at("terrainSplatMap"), textures.at("terrainRTex"), textures.at("terrainGTex"), textures.at("terrainBTex"), textures.at("terrainBgTex"));
+	world->AddGameObject(new Terrain(Vector2(), meshes.at("terrainMesh"), terrainTexturePack, shaders.at("terrainShader")));
+	world->AddGameObject(new Terrain(Vector2(0, 1), meshes.at("terrainMesh"), terrainTexturePack, shaders.at("terrainShader")));
 
 	//InitGameExamples();
 	//InitDefaultFloor();
@@ -140,7 +147,11 @@ GameObject* SampleGame::AddFloorToWorld(const Vector3& position) {
 		.SetScale(floorSize * 2)
 		.SetPosition(position);
 
-	floor->SetRenderObject(new RenderObject(&floor->GetTransform(), meshes.at("cubeMesh"), textures.at("floorTex"), shaders.at("basicShader")));
+	floor->SetRenderObject(new RenderObject(&floor->GetTransform(), meshes.at("cubeMesh"), shaders.at("basicShader")));
+	int numSubMeshes = meshes.at("cubeMesh")->GetSubMeshCount();
+	for (int subMeshIndex = 0; subMeshIndex < numSubMeshes; ++subMeshIndex) {
+		floor->GetRenderObject()->AddTexture(subMeshIndex, textures.at("floorTex"), "mainTex");
+	}
 	//floor->GetRenderObject()->SetColour(Vector4(0, 1, 0, 1));
 	floor->SetPhysicsObject(new PhysicsObject(&floor->GetTransform(), floor->GetBoundingVolume()));
 
@@ -171,7 +182,8 @@ GameObject* SampleGame::AddSphereToWorld(const Vector3& position, float radius, 
 		.SetScale(sphereSize)
 		.SetPosition(position);
 
-	sphere->SetRenderObject(new RenderObject(&sphere->GetTransform(), meshes.at("sphereMesh"), textures.at("basicTex"), shaders.at("basicShader")));
+	sphere->SetRenderObject(new RenderObject(&sphere->GetTransform(), meshes.at("sphereMesh"), shaders.at("basicShader")));
+	sphere->GetRenderObject()->AddTexture(0, textures.at("basicTex"), "mainTex");
 	sphere->SetPhysicsObject(new PhysicsObject(&sphere->GetTransform(), sphere->GetBoundingVolume()));
 
 	sphere->GetPhysicsObject()->SetInverseMass(inverseMass);
@@ -194,7 +206,8 @@ GameObject* SampleGame::AddCubeToWorld(const Vector3& position, Vector3 dimensio
 		.SetPosition(position)
 		.SetScale(dimensions * 2);
 
-	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), meshes.at("cubeMesh"), textures.at("basicTex"), shaders.at("basicShader")));
+	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), meshes.at("cubeMesh"), shaders.at("basicShader")));
+	cube->GetRenderObject()->AddTexture(0, textures.at("basicTex"), "mainTex");
 	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
 
 	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
