@@ -11,6 +11,7 @@ https://research.ncl.ac.uk/game/
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Maths.h"
+#include "TextureLoader.h";
 
 using namespace NCL;
 using namespace NCL::Rendering;
@@ -36,13 +37,13 @@ OGLMesh::OGLMesh(const std::string&filename) : MeshGeometry(filename){
 	indexBuffer = 0;
 }
 
-OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount, int size) {
+OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount) {
 	OGLMesh* m = new OGLMesh();
 	m->primType = Triangles;
 
 	for (int z = 0; z < hVertexCount; ++z) {
 		for (int x = 0; x < wVertexCount; ++x) {
-			m->positions.emplace_back(Vector3((float)x / ((float)wVertexCount - 1) * size, 0, (float)z / ((float)hVertexCount - 1) * size));
+			m->positions.emplace_back(Vector3((float)x / ((float)wVertexCount - 1), 0, (float)z / ((float)hVertexCount - 1)));
 			m->texCoords.emplace_back(Vector2((float)x / ((float)wVertexCount - 1), (float)z / ((float)hVertexCount - 1)));
 		}
 	}
@@ -63,6 +64,55 @@ OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount, int size)
 		}
 	}
 	
+	m->AddSubMesh(0, (wVertexCount - 1) * (hVertexCount - 1) * 6, 0);
+	m->CalculateNormals();
+	m->CalculateTangents();
+
+	m->UploadToGPU();
+	return m;
+}
+
+OGLMesh* OGLMesh::GenerateHeightMap(const std::string& filename) {
+	unsigned char* texData = nullptr;
+	int wVertexCount = 0;
+	int hVertexCount = 0;
+	int channels = 0;
+	int flags = 0;
+
+	TextureLoader::LoadTextureGreyScale(filename, texData, wVertexCount, hVertexCount, channels, flags);
+	OGLMesh* m = new OGLMesh();
+	m->primType = Triangles;
+
+	auto pixelPtr = &texData[0];
+	int bytesPerPixel = 1;
+	for (int z = 0; z < hVertexCount; ++z) {
+		for (int x = 0; x < wVertexCount; ++x) {
+
+			float height = ((*pixelPtr)/ 256.0) * 10;
+			std::cout << height << " ";
+			m->positions.emplace_back(Vector3((float)x / ((float)wVertexCount - 1), height, (float)z / ((float)hVertexCount - 1)));
+			m->texCoords.emplace_back(Vector2((float)x / ((float)wVertexCount - 1), (float)z / ((float)hVertexCount - 1)));
+			pixelPtr += bytesPerPixel;
+		}
+		std::cout << '\n';
+	}
+
+	int i = 0;
+	for (int z = 0; z < hVertexCount - 1; ++z) { 
+		for (int x = 0; x < wVertexCount - 1; ++x) {
+			int a = (z * (wVertexCount)) + x;
+			int b = (z * (wVertexCount)) + (x + 1);
+			int c = ((z + 1) * (wVertexCount)) + (x + 1);
+			int d = ((z + 1) * (wVertexCount)) + x;
+			m->indices.emplace_back(a);
+			m->indices.emplace_back(c);
+			m->indices.emplace_back(b);
+			m->indices.emplace_back(c);
+			m->indices.emplace_back(a);
+			m->indices.emplace_back(d);
+		}
+	}
+
 	m->AddSubMesh(0, (wVertexCount - 1) * (hVertexCount - 1) * 6, 0);
 	m->CalculateNormals();
 	m->CalculateTangents();

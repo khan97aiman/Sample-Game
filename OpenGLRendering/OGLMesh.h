@@ -20,7 +20,9 @@ namespace NCL {
 			friend class OGLRenderer;
 			OGLMesh();
 			OGLMesh(const std::string&filename);
-			static OGLMesh* GenerateFlatMesh(int hVertexCount = 128, int wVertexCount = 128, int size = 1);
+			static OGLMesh* GenerateFlatMesh(int hVertexCount = 128, int wVertexCount = 128);
+			static OGLMesh* GenerateHeightMap(const std::string& filename);
+
 			static OGLMesh* GenerateQuad();
 			static OGLMesh* GenerateHUDQuad();
 

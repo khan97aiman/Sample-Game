@@ -23,6 +23,7 @@ namespace NCL {
 	class TextureLoader	{
 	public:
 		static bool LoadTexture(const std::string& filename, char*& outData, int& width, int &height, int &channels, int&flags);
+		static bool LoadTextureGreyScale(const std::string& filename, unsigned char*& outData, int& width, int& height, int& channels, int& flags);
 
 		static void RegisterTextureLoadFunction(TextureLoadFunction f, const std::string&fileExtension);
 

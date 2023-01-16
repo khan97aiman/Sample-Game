@@ -10,7 +10,7 @@ Terrain::Terrain(Vector2 gridPosition, MeshGeometry* mesh, TerrainTexturePack te
 	transform.SetPosition(Vector3(gridPosition.x * size, 0, gridPosition.y * size));
 	//transform.SetPosition(Vector3(0, 10, 0));
 
-	transform.SetScale(Vector3(size, 0, size));
+	transform.SetScale(Vector3(size, 1, size));
 	name = "terrain";
 	renderObject = new RenderObject(&transform, mesh, shader);
 	

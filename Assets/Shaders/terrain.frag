@@ -31,7 +31,7 @@ out vec4 fragColor;
 void main(void)
 {
 	vec4 splatMapColor = texture(splatMapTex, IN.texCoord); //what is the color value on the splatmap
-	vec2 tiledTexCoord = IN.texCoord * 10;
+	vec2 tiledTexCoord = IN.texCoord * 20;
 	
 	vec4 rTexColor 		= texture(rTex, tiledTexCoord) * splatMapColor.r;
 	vec4 gTexColor 		= texture(gTex, tiledTexCoord) * splatMapColor.g;
