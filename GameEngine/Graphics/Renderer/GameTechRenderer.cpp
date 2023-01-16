@@ -363,8 +363,12 @@ MeshGeometry* GameTechRenderer::LoadMesh(const string& name) {
 	return mesh;
 }
 
-MeshGeometry* GameTechRenderer::LoadFlatMesh() {
-	return OGLMesh::GenerateHeightMap("noise.png");
+MeshGeometry* GameTechRenderer::LoadFlatMesh(int hVertexCount, int wVertexCount) {
+	return OGLMesh::GenerateFlatMesh(hVertexCount, wVertexCount);
+}
+
+MeshGeometry* GameTechRenderer::LoadHeightMap(const std::string& filename, int heightMultiplier) {
+	return OGLMesh::GenerateHeightMap(filename, heightMultiplier);
 }
 
 void GameTechRenderer::NewRenderLines() {

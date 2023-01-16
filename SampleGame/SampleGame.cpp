@@ -36,7 +36,7 @@ void SampleGame::InitialiseAssets() {
 	meshes.insert(std::make_pair("enemyMesh", renderer->LoadMesh("Keeper.msh")));
 	meshes.insert(std::make_pair("coinMesh", renderer->LoadMesh("coin.msh")));
 	meshes.insert(std::make_pair("capsuleMesh", renderer->LoadMesh("capsule.msh")));
-	meshes.insert(std::make_pair("terrainMesh", renderer->LoadFlatMesh()));
+	meshes.insert(std::make_pair("terrainMesh", renderer->LoadHeightMap("noise.png")));
 
 	meshMaterials.insert(std::make_pair("goatMat", new MeshMaterial("goat.mat")));
 	//meshMaterials.at("goatMat")->LoadTextures();
