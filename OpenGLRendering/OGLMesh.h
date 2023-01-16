@@ -21,7 +21,7 @@ namespace NCL {
 			OGLMesh();
 			OGLMesh(const std::string&filename);
 			static OGLMesh* GenerateFlatMesh(int hVertexCount = 128, int wVertexCount = 128);
-			static OGLMesh* GenerateHeightMap(const std::string& filename);
+			static OGLMesh* GenerateHeightMap(const std::string& filename, int heightMultiplier = 10);
 
 			static OGLMesh* GenerateQuad();
 			static OGLMesh* GenerateHUDQuad();

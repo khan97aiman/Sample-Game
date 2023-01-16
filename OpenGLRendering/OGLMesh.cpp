@@ -12,6 +12,7 @@ https://research.ncl.ac.uk/game/
 #include "Vector4.h"
 #include "Maths.h"
 #include "TextureLoader.h";
+#include "stb/stb_image.h"
 
 using namespace NCL;
 using namespace NCL::Rendering;
@@ -72,7 +73,7 @@ OGLMesh* OGLMesh::GenerateFlatMesh(int hVertexCount, int wVertexCount) {
 	return m;
 }
 
-OGLMesh* OGLMesh::GenerateHeightMap(const std::string& filename) {
+OGLMesh* OGLMesh::GenerateHeightMap(const std::string& filename, int heightMultiplier) {
 	unsigned char* texData = nullptr;
 	int wVertexCount = 0;
 	int hVertexCount = 0;
@@ -85,17 +86,18 @@ OGLMesh* OGLMesh::GenerateHeightMap(const std::string& filename) {
 
 	auto pixelPtr = &texData[0];
 	int bytesPerPixel = 1;
+	float maxPixelColor = 256.0f;
 	for (int z = 0; z < hVertexCount; ++z) {
 		for (int x = 0; x < wVertexCount; ++x) {
 
-			float height = ((*pixelPtr)/ 256.0) * 10;
-			std::cout << height << " ";
+			float height = ((*pixelPtr)/ maxPixelColor) * heightMultiplier;
 			m->positions.emplace_back(Vector3((float)x / ((float)wVertexCount - 1), height, (float)z / ((float)hVertexCount - 1)));
 			m->texCoords.emplace_back(Vector2((float)x / ((float)wVertexCount - 1), (float)z / ((float)hVertexCount - 1)));
 			pixelPtr += bytesPerPixel;
 		}
-		std::cout << '\n';
 	}
+
+	stbi_image_free(texData);
 
 	int i = 0;
 	for (int z = 0; z < hVertexCount - 1; ++z) { 

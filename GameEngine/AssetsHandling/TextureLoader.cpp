@@ -59,19 +59,9 @@ bool TextureLoader::LoadTextureGreyScale(const std::string& filename, unsigned c
 	}
 
 	std::filesystem::path path(filename);
-
-	std::string extension = path.extension().string();
-
 	bool isAbsolute = path.is_absolute();
-
-	auto it = fileHandlers.find(extension);
-
 	std::string realPath = isAbsolute ? filename : Assets::TEXTUREDIR + filename;
 
-	//if (it != fileHandlers.end()) {
-	//	//There's a custom handler function for this, just use that
-	//	return it->second(realPath, outData, width, height, channels, flags);
-	//}
 	//By default, attempt to use stb image to get this texture
 	unsigned char* texData = stbi_load(realPath.c_str(), &width, &height, &channels, 1); //1 forces this to always be grey scale!
 
