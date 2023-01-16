@@ -8,7 +8,7 @@ using namespace Rendering;
 
 Terrain::Terrain(Vector2 gridPosition, MeshGeometry* mesh, TerrainTexturePack texturePack, ShaderBase* shader, int size): GameObject() {
 	transform.SetPosition(Vector3(gridPosition.x * size, 0, gridPosition.y * size));
-	//transform.SetPosition(Vector3(0, 10, 0));
+	transform.SetPosition(Matrix4::Translation(Vector3(-size / 2, 0, -size / 2)) * transform.GetPosition()); //for centering the terrain around this point
 
 	transform.SetScale(Vector3(size, 1, size));
 	name = "terrain";
@@ -20,7 +20,6 @@ Terrain::Terrain(Vector2 gridPosition, MeshGeometry* mesh, TerrainTexturePack te
 	renderObject->AddTexture(0, texturePack.bgTex, "bgTex");
 	renderObject->AddTexture(0, texturePack.splatMap, "splatMapTex");
 
-	//renderObject->SetColour(Vector4(1, 1, 0, 1));
 	float inverseMass = 0.0f;
 	physicsObject = new PhysicsObject(&transform, NULL);
 	physicsObject->SetInverseMass(inverseMass);
