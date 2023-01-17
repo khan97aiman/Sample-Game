@@ -21,7 +21,11 @@ out Vertex
 	vec4 shadowProj;
 	vec3 normal;
 	vec3 worldPos;
+	float visibility;
 } OUT;
+
+const float density = 0.007;
+const float gradient = 1.5;
 
 void main(void)
 {
@@ -38,5 +42,10 @@ void main(void)
 	if(hasVertexColours) {
 		OUT.colour		= objectColour * colour;
 	}
+
+	vec4 posRelativeToCamera = viewMatrix * vec4(OUT.worldPos, 1.0);
+	float distance = length(posRelativeToCamera.xyz);
+	OUT.visibility = clamp(exp(-pow((distance * density), gradient)), 0.0, 1.0);
+
 	gl_Position		= mvp * vec4(position, 1.0);
 }

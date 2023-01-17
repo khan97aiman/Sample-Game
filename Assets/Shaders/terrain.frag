@@ -24,6 +24,7 @@ in Vertex
 	vec4 shadowProj;
 	vec3 normal;
 	vec3 worldPos;
+	float visibility;
 } IN;
 
 out vec4 fragColor;
@@ -71,4 +72,6 @@ void main(void)
 	fragColor.rgb = pow(fragColor.rgb, vec3(1.0 / 2.2f));
 	
 	fragColor.a = albedo.a;
+
+	fragColor = mix(vec4(0.5, 0.5, 0.5, 1), fragColor, IN.visibility);
 }
