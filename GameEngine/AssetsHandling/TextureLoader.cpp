@@ -75,6 +75,14 @@ bool TextureLoader::LoadTextureGreyScale(const std::string& filename, unsigned c
 	return false;
 }
 
+bool TextureLoader::FreeTexture(char*& texData) {
+	if (texData) {
+		stbi_image_free(texData);
+		return true;
+	}
+	return false;
+}
+
 void TextureLoader::RegisterTextureLoadFunction(TextureLoadFunction f, const std::string&fileExtension) {
 	fileHandlers.insert(std::make_pair(fileExtension, f));
 }
