@@ -20,7 +20,7 @@ namespace NCL {
 			GameTechRenderer(GameWorld& world);
 			~GameTechRenderer();
 			virtual void Update(float dt);
-
+			
 			MeshGeometry*	LoadMesh(const string& name);
 			MeshGeometry* LoadFlatMesh(int hVertexCount = 128, int wVertexCount = 128);
 			MeshGeometry* LoadHeightMap(const std::string& filename, int heightMultiplier = 10);
@@ -28,6 +28,7 @@ namespace NCL {
 			ShaderBase*		LoadShader(const string& vertex, const string& fragment);
 			void AddHudTextures(const string& name, const Vector2& position, const Vector2& scale);
 
+			void UseFog(bool val) { useFog = val; }
 		protected:
 			void NewRenderLines();
 			void NewRenderText();
@@ -84,6 +85,7 @@ namespace NCL {
 			OGLMesh* quadModel;
 			OGLShader* hudShader;
 			vector<TextureHUD> hudTextures;
+			bool useFog = false;
 		};
 	}
 }

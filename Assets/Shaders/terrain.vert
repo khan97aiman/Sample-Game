@@ -11,6 +11,8 @@ layout(location = 2) in vec2 texCoord;
 layout(location = 3) in vec3 normal;
 
 uniform vec4 		objectColour = vec4(1,1,1,1);
+uniform bool 		useFog = false;
+
 
 uniform bool hasVertexColours = false;
 
@@ -43,9 +45,14 @@ void main(void)
 		OUT.colour		= objectColour * colour;
 	}
 
-	vec4 posRelativeToCamera = viewMatrix * vec4(OUT.worldPos, 1.0);
-	float distance = length(posRelativeToCamera.xyz);
-	OUT.visibility = clamp(exp(-pow((distance * density), gradient)), 0.0, 1.0);
+	if (useFog) {
+		vec4 posRelativeToCamera = viewMatrix * vec4(OUT.worldPos, 1.0);
+		float distance = length(posRelativeToCamera.xyz);
+		OUT.visibility = clamp(exp(-pow((distance * density), gradient)), 0.0, 1.0);
+	}
+	else {
+		OUT.visibility = 1.0;
+	}
 
 	gl_Position		= mvp * vec4(position, 1.0);
 }

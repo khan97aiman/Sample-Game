@@ -229,6 +229,7 @@ void GameTechRenderer::RenderCamera() {
 	int colourLocation  = 0;
 	int hasVColLocation = 0;
 	int hasTexLocation  = 0;
+	int useFogLocation = 0;
 	int shadowLocation  = 0;
 	int jointsLocation	= 0;
 
@@ -260,6 +261,7 @@ void GameTechRenderer::RenderCamera() {
 			colourLocation  = glGetUniformLocation(shader->GetProgramID(), "objectColour");
 			hasVColLocation = glGetUniformLocation(shader->GetProgramID(), "hasVertexColours");
 			hasTexLocation  = glGetUniformLocation(shader->GetProgramID(), "hasTexture");
+			useFogLocation	= glGetUniformLocation(shader->GetProgramID(), "useFog");
 
 			lightPosLocation	= glGetUniformLocation(shader->GetProgramID(), "lightPos");
 			lightColourLocation = glGetUniformLocation(shader->GetProgramID(), "lightColour");
@@ -273,6 +275,8 @@ void GameTechRenderer::RenderCamera() {
 
 			glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
 			glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
+
+			glUniform1i(useFogLocation, useFog);
 
 			glUniform3fv(lightPosLocation	, 1, (float*)&lightPosition);
 			glUniform4fv(lightColourLocation, 1, (float*)&lightColour);

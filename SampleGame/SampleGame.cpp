@@ -14,11 +14,11 @@ SampleGame::SampleGame() {
 	physics = new PhysicsSystem(*world);
 
 	forceMagnitude = 10.0f;
-	useGravity = true;
 	inSelectionMode = false;
 
 	InitialiseAssets();
 	physics->UseGravity(useGravity);
+	renderer->UseFog(useFog);
 	hedgeMaze = nullptr;
 }
 

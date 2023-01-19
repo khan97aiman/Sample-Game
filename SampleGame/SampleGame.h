@@ -58,7 +58,8 @@ namespace NCL {
 			PhysicsSystem* physics;
 			GameWorld* world;
 
-			bool useGravity;
+			bool useGravity = true;
+			bool useFog = true;
 			bool inSelectionMode;
 
 			float		forceMagnitude;
