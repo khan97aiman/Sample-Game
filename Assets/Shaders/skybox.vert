@@ -2,6 +2,7 @@
 
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
+uniform mat4 transformationMatrix;
 
 in  vec3 position;
 
@@ -16,5 +17,6 @@ void main(void)		{
 	pos.z 	= -1.0f;
 
 	OUT.viewDir		= transpose(mat3(viewMatrix)) * normalize(pos);
+	OUT.viewDir = (transformationMatrix * vec4(OUT.viewDir, 1.0)).xyz;
 	gl_Position		= vec4(position, 1.0);
 }

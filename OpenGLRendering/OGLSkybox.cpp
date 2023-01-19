@@ -6,6 +6,7 @@
 
 using namespace NCL;
 using namespace NCL::Rendering;
+using namespace Maths;
 
 OGLSkybox::OGLSkybox() {
 	skyboxShader = new OGLShader("skybox.vert", "skybox.frag");
@@ -63,3 +64,12 @@ OGLSkybox::~OGLSkybox() {
 	delete skyboxMesh;
 	glDeleteTextures(1, &skyboxTex);
 }
+
+void OGLSkybox::Update(float dt) {
+	currentRotation += ROTATE_SPEED * dt;
+}
+
+Matrix4 OGLSkybox::GetTransformationMatrix() {
+	return Matrix4::Rotation(currentRotation, Vector3(0, 1, 0));
+}
+	

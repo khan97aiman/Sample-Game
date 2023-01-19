@@ -101,6 +101,10 @@ void GameTechRenderer::RenderFrame() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void GameTechRenderer::Update(float dt) {
+	skybox->Update(dt);
+}
+
 void GameTechRenderer::BuildObjectList() {
 	activeObjects.clear();
 
@@ -164,16 +168,22 @@ void GameTechRenderer::RenderSkybox() {
 	//float screenAspect = (float)windowWidth / (float)windowHeight;
 	Matrix4 viewMatrix = gameWorld.GetMainCamera()->BuildViewMatrix();
 	Matrix4 projMatrix = gameWorld.GetMainCamera()->BuildProjectionMatrix();
+	Matrix4 transformationMatrix = skybox->GetTransformationMatrix();
+
 
 	OGLShader* skyboxShader = skybox->GetShader();
 	BindShader(skyboxShader);
 
 	int projLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "projMatrix");
 	int viewLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "viewMatrix");
+	int transformationLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "transformationMatrix");
+
 	int texLocation  = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTex");
 
 	glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
 	glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
+	glUniformMatrix4fv(transformationLocation, 1, false, (float*)&transformationMatrix);
+
 
 	glUniform1i(texLocation, 0);
 	glActiveTexture(GL_TEXTURE0);

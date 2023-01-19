@@ -19,6 +19,7 @@ namespace NCL {
 		public:
 			GameTechRenderer(GameWorld& world);
 			~GameTechRenderer();
+			virtual void Update(float dt);
 
 			MeshGeometry*	LoadMesh(const string& name);
 			MeshGeometry* LoadFlatMesh(int hVertexCount = 128, int wVertexCount = 128);
