@@ -1,6 +1,7 @@
 #version 400 core
 
 uniform vec4 		objectColour;
+uniform vec4		fogColour;
 uniform sampler2DShadow shadowTex;
 
 uniform sampler2D 	splatMapTex;
@@ -73,5 +74,5 @@ void main(void)
 	
 	fragColor.a = albedo.a;
 
-	fragColor = mix(vec4(0.5, 0.5, 0.5, 1), fragColor, IN.visibility);
+	fragColor = mix(fogColour, fragColor, IN.visibility);
 }

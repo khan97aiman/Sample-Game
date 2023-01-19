@@ -86,6 +86,7 @@ namespace NCL {
 			OGLShader* hudShader;
 			vector<TextureHUD> hudTextures;
 			bool useFog = false;
+			Vector4 fogColour = Vector4(0.6706f, 0.6824f, 0.6902f, 1.0f);
 		};
 	}
 }
