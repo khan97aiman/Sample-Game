@@ -12,7 +12,7 @@ in Vertex {
 
 out vec4 fragColour;
 const float belowHorizonLevel = 0.0f;
-const float aboveHorizonLevel = 0.5f;
+const float aboveHorizonLevel = 0.25f;
 
 void main(void)	{
 	vec3 viewDir = normalize(IN.viewDir);
@@ -22,8 +22,8 @@ void main(void)	{
 
 	fragColour = pow(finalTexture, vec4(2.2f));
 
-	if (useFog) {
-		float ratio = clamp((IN.viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
+	if (false) {
+		float ratio = clamp((viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
 		fragColour = mix(fogColour, fragColour, ratio);
 	}
 }
