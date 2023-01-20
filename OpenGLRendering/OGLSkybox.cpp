@@ -15,7 +15,7 @@ OGLSkybox::OGLSkybox() {
 	skyboxMesh->SetVertexIndices({ 0,1,2,2,3,0 });
 	skyboxMesh->UploadToGPU();
 
-	std::string filenames[6] = {
+	std::string dayFilenames[6] = {
 		"/Cubemap/skyrender0004.png",
 		"/Cubemap/skyrender0001.png",
 		"/Cubemap/skyrender0003.png",
@@ -24,6 +24,38 @@ OGLSkybox::OGLSkybox() {
 		"/Cubemap/skyrender0005.png"
 	};
 
+	std::string nightFilenames[6] = {
+		"/Cubemap/Night/posx.png",
+		"/Cubemap/Night/negx.png",
+		"/Cubemap/Night/posy.png",
+		"/Cubemap/Night/negy.png",
+		"/Cubemap/Night/posz.png",
+		"/Cubemap/Night/negz.png"
+	};
+
+	LoadTextures(dayFilenames, skyboxTexDay);
+	LoadTextures(nightFilenames, skyboxTexNight);
+
+}
+
+OGLSkybox::~OGLSkybox() {
+	delete skyboxShader;
+	delete skyboxMesh;
+	glDeleteTextures(1, &skyboxTexDay);
+	glDeleteTextures(1, &skyboxTexNight);
+
+}
+
+void OGLSkybox::Update(float dt) {
+	currentRotation += ROTATE_SPEED * dt;
+}
+
+Matrix4 OGLSkybox::GetTransformationMatrix() {
+	return Matrix4::Rotation(currentRotation, Vector3(0, 1, 0));
+}
+
+void OGLSkybox::LoadTextures(std::string* filenames, GLuint& texID) {
+	
 	int width[6] = { 0 };
 	int height[6] = { 0 };
 	int channels[6] = { 0 };
@@ -39,8 +71,8 @@ OGLSkybox::OGLSkybox() {
 		}
 	}
 
-	glGenTextures(1, &skyboxTex);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTex);
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
 
 	GLenum type = channels[0] == 4 ? GL_RGBA : GL_RGB;
 
@@ -58,18 +90,3 @@ OGLSkybox::OGLSkybox() {
 		TextureLoader::FreeTexture(texData[i]);
 	}
 }
-
-OGLSkybox::~OGLSkybox() {
-	delete skyboxShader;
-	delete skyboxMesh;
-	glDeleteTextures(1, &skyboxTex);
-}
-
-void OGLSkybox::Update(float dt) {
-	currentRotation += ROTATE_SPEED * dt;
-}
-
-Matrix4 OGLSkybox::GetTransformationMatrix() {
-	return Matrix4::Rotation(currentRotation, Vector3(0, 1, 0));
-}
-	

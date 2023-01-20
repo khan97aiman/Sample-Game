@@ -11,13 +11,17 @@ namespace NCL {
 			OGLSkybox();
 			~OGLSkybox();
 			OGLMesh* GetMesh() { return skyboxMesh; }
-			GLuint& GetTexID() { return skyboxTex; }
+			GLuint& GetDayTexID() { return skyboxTexDay; }
+			GLuint& GetNightTexID() { return skyboxTexNight; }
 			OGLShader* GetShader() { return skyboxShader; }
 			void Update(float dt);
 			Matrix4 GetTransformationMatrix();
 		protected:
+			void LoadTextures(std::string* filenames, GLuint& texID);
+
 			OGLMesh* skyboxMesh;
-			GLuint skyboxTex = 0;
+			GLuint skyboxTexDay = 0;
+			GLuint skyboxTexNight = 0;
 			OGLShader* skyboxShader;
 			float currentRotation = 0;
 			const float ROTATE_SPEED = 5.0f;

@@ -179,7 +179,8 @@ void GameTechRenderer::RenderSkybox() {
 	int transformationLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "transformationMatrix");
 	int useFogLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "useFog");;
 	int fogColourLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "fogColour");;
-	int texLocation  = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTex");
+	int texLocationDay  = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexDay");
+	int texLocationNight = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexNight");
 
 	glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
 	glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
@@ -187,9 +188,13 @@ void GameTechRenderer::RenderSkybox() {
 	glUniform1i(useFogLocation, useFog);
 	glUniform4fv(fogColourLocation, 1, (float*)&fogColour);
 
-	glUniform1i(texLocation, 0);
+	glUniform1i(texLocationDay, 0);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->GetTexID());
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->GetDayTexID());
+
+	glUniform1i(texLocationNight, 1);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->GetNightTexID());
 
 	BindMesh(skybox->GetMesh());
 	DrawBoundMesh();

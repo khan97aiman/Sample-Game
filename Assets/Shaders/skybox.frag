@@ -1,6 +1,8 @@
 #version 330 core
 
-uniform samplerCube cubeTex;
+uniform samplerCube cubeTexDay;
+uniform samplerCube cubeTexNight;
+
 uniform bool useFog = false;
 uniform vec4 fogColour;
 
@@ -13,8 +15,12 @@ const float belowHorizonLevel = 0.0f;
 const float aboveHorizonLevel = 0.5f;
 
 void main(void)	{
-	vec4 samp = texture(cubeTex, normalize(IN.viewDir));
-	fragColour = pow(samp, vec4(2.2f));
+	vec3 viewDir = normalize(IN.viewDir);
+	vec4 dayTexture = texture(cubeTexDay, viewDir);
+	vec4 nightTexture = texture(cubeTexNight, viewDir);
+	vec4 finalTexture = mix(dayTexture, nightTexture, 1);
+
+	fragColour = pow(finalTexture, vec4(2.2f));
 
 	if (useFog) {
 		float ratio = clamp((IN.viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
