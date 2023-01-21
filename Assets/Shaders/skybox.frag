@@ -5,6 +5,7 @@ uniform samplerCube cubeTexNight;
 
 uniform bool useFog = false;
 uniform vec4 fogColour;
+uniform float dayNightRatio;
 
 in Vertex {
 	vec3 viewDir;
@@ -18,7 +19,7 @@ void main(void)	{
 	vec3 viewDir = normalize(IN.viewDir);
 	vec4 dayTexture = texture(cubeTexDay, viewDir);
 	vec4 nightTexture = texture(cubeTexNight, viewDir);
-	vec4 finalTexture = mix(dayTexture, nightTexture, 1);
+	vec4 finalTexture = mix(dayTexture, nightTexture, dayNightRatio);
 
 	fragColour = pow(finalTexture, vec4(2.2f));
 

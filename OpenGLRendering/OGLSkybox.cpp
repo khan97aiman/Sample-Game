@@ -3,6 +3,7 @@
 #include <vector>
 #include "TextureLoader.h"
 #include <iostream>
+#include "Window.h"
 
 using namespace NCL;
 using namespace NCL::Rendering;
@@ -48,6 +49,8 @@ OGLSkybox::~OGLSkybox() {
 
 void OGLSkybox::Update(float dt) {
 	currentRotation += ROTATE_SPEED * dt;
+	float time = Window::GetWindow()->GetTimer()->GetTotalTimeSeconds();
+	dayNightRatio = (sin(phaseShift + time * frequency) * 0.5) + 0.5;
 }
 
 Matrix4 OGLSkybox::GetTransformationMatrix() {

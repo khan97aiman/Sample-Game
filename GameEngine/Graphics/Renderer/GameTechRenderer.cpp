@@ -181,12 +181,15 @@ void GameTechRenderer::RenderSkybox() {
 	int fogColourLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "fogColour");;
 	int texLocationDay  = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexDay");
 	int texLocationNight = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexNight");
+	int dayNightRatio = glGetUniformLocation(skyboxShader->GetProgramID(), "dayNightRatio");
+
 
 	glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
 	glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
 	glUniformMatrix4fv(transformationLocation, 1, false, (float*)&transformationMatrix);
 	glUniform1i(useFogLocation, useFog);
 	glUniform4fv(fogColourLocation, 1, (float*)&fogColour);
+	glUniform1f(dayNightRatio, skybox->GetDayNightRatio());
 
 	glUniform1i(texLocationDay, 0);
 	glActiveTexture(GL_TEXTURE0);
