@@ -86,7 +86,7 @@ namespace NCL {
 			OGLShader* hudShader;
 			vector<TextureHUD> hudTextures;
 			bool useFog = false;
-			Vector4 fogColour = Vector4(0.6706f, 0.6824f, 0.6902f, 1.0f);
+			Vector3 fogColour = Vector3(0.6706f, 0.6824f, 0.6902f); //removing alpha value of fog colour to preserve the original transparency value of the fragment
 		};
 	}
 }

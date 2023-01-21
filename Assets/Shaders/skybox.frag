@@ -4,7 +4,7 @@ uniform samplerCube cubeTexDay;
 uniform samplerCube cubeTexNight;
 
 uniform bool useFog = false;
-uniform vec4 fogColour;
+uniform vec3 fogColour;
 uniform float dayNightRatio;
 
 in Vertex {
@@ -25,6 +25,6 @@ void main(void)	{
 
 	if (false) {
 		float ratio = clamp((viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
-		fragColour = mix(fogColour, fragColour, ratio);
+		fragColour.rgb = mix(fogColour, fragColour.rgb, ratio);
 	}
 }

@@ -188,7 +188,7 @@ void GameTechRenderer::RenderSkybox() {
 	glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
 	glUniformMatrix4fv(transformationLocation, 1, false, (float*)&transformationMatrix);
 	glUniform1i(useFogLocation, useFog);
-	glUniform4fv(fogColourLocation, 1, (float*)&fogColour);
+	glUniform3fv(fogColourLocation, 1, (float*)&fogColour);
 	glUniform1f(dayNightRatio, skybox->GetDayNightRatio());
 
 	glUniform1i(texLocationDay, 0);
@@ -290,7 +290,7 @@ void GameTechRenderer::RenderCamera() {
 			glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
 
 			glUniform1i(useFogLocation, useFog);
-			glUniform4fv(fogColourLocation, 1, (float*)&fogColour);
+			glUniform3fv(fogColourLocation, 1, (float*)&fogColour);
 
 
 			glUniform3fv(lightPosLocation	, 1, (float*)&lightPosition);
