@@ -213,17 +213,9 @@ void GameTechRenderer::RenderSkybox() {
 	RenderSky();
 	// ----------------------------------------------------------------------------------------------------
 	
-	BindShader(skybox->GetFogShader());
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	////binding skybox texture to shader:
-	glDisable(GL_DEPTH_TEST);
-	glUniform1i(glGetUniformLocation(skybox->GetFogShader()->GetProgramID(), "skyboxTex"), 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, skybox->GetFinalTexID());
-	BindMesh(skybox->GetFogMesh());
-	DrawBoundMesh();
-	//RenderSky();
+	RenderSky();
 }
 
 void GameTechRenderer::RenderHUD() {

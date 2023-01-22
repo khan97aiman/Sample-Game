@@ -11,18 +11,10 @@ using namespace Maths;
 
 OGLSkybox::OGLSkybox() {
 	skyboxShader = new OGLShader("skybox.vert", "skybox.frag");
-	skyboxFogShader = new OGLShader("skyboxFog.vert", "skyboxFog.frag");
-
 	skyboxMesh = new OGLMesh();
 	skyboxMesh->SetVertexPositions({ Vector3(-1, 1,-1), Vector3(-1,-1,-1) , Vector3(1,-1,-1) , Vector3(1,1,-1) });
 	skyboxMesh->SetVertexIndices({ 0,1,2,2,3,0 });
 	skyboxMesh->UploadToGPU();
-
-	skyboxFogMesh = new OGLMesh();
-	skyboxFogMesh->SetVertexPositions({ Vector3(-1, 1, 0), Vector3(-1,-1, 0) , Vector3(1,-1, 0) , Vector3(1,1, 0) });
-	skyboxFogMesh->SetVertexTextureCoords({ Vector2(0.0f, 1.0f), Vector2(0.0f, 0.0f), Vector2(1.0f, 0.0f), Vector2(1.0f, 1.0f) });
-	skyboxFogMesh->SetVertexIndices({ 0,1,2,2,3,0 });
-	skyboxFogMesh->UploadToGPU();
 
 	std::string dayFilenames[6] = {
 		"/Cubemap/skyrender0004.png",
@@ -66,9 +58,7 @@ OGLSkybox::OGLSkybox() {
 
 OGLSkybox::~OGLSkybox() {
 	delete skyboxShader;
-	delete skyboxFogShader;
 	delete skyboxMesh;
-	delete skyboxFogMesh;
 	glDeleteTextures(1, &skyboxTexDay);
 	glDeleteTextures(1, &skyboxTexNight);
 	glDeleteTextures(1, &skyboxTexFinal);
@@ -76,25 +66,13 @@ OGLSkybox::~OGLSkybox() {
 }
 
 void OGLSkybox::Update(float dt) {
-	//currentRotation += ROTATE_SPEED * dt;
+	currentRotation += ROTATE_SPEED * dt;
 	float time = Window::GetWindow()->GetTimer()->GetTotalTimeSeconds();
 	dayNightRatio = (sin(phaseShift + time * frequency) * 0.5) + 0.5;
 }
 
 Matrix4 OGLSkybox::GetTransformationMatrix() {
 	return Matrix4::Rotation(currentRotation, Vector3(0, 1, 0));
-}
-
-void OGLSkybox::RenderFog() {
-	//rendering skybox fog to the default fbo:
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	//binding skybox texture to shader:
-	glUniform1i(glGetUniformLocation(skyboxFogShader->GetProgramID(), "skyboxTex"), 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, skyboxTexFinal);
-
 }
 
 void OGLSkybox::LoadTextures(std::string* filenames, GLuint& texID) {

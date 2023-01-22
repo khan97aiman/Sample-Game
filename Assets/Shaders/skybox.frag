@@ -25,8 +25,8 @@ void main(void)	{
 
 	fragColour = pow(finalTexture, vec4(2.2f));
 
-	if (false) {
+	if (useFog) {
 		//float ratio = clamp((viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
-		fragColour.rgb = mix(fogColour, fragColour.rgb, 0.75);
+		fragColour.rgb = mix(fogColour, fragColour.rgb, 0.85);
 	}
 }
