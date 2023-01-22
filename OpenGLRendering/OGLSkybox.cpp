@@ -11,10 +11,18 @@ using namespace Maths;
 
 OGLSkybox::OGLSkybox() {
 	skyboxShader = new OGLShader("skybox.vert", "skybox.frag");
+	skyboxFogShader = new OGLShader("skyboxFog.vert", "skyboxFog.frag");
+
 	skyboxMesh = new OGLMesh();
 	skyboxMesh->SetVertexPositions({ Vector3(-1, 1,-1), Vector3(-1,-1,-1) , Vector3(1,-1,-1) , Vector3(1,1,-1) });
 	skyboxMesh->SetVertexIndices({ 0,1,2,2,3,0 });
 	skyboxMesh->UploadToGPU();
+
+	skyboxFogMesh = new OGLMesh();
+	skyboxFogMesh->SetVertexPositions({ Vector3(-1, 1, 0), Vector3(-1,-1, 0) , Vector3(1,-1, 0) , Vector3(1,1, 0) });
+	skyboxFogMesh->SetVertexTextureCoords({ Vector2(0.0f, 1.0f), Vector2(0.0f, 0.0f), Vector2(1.0f, 0.0f), Vector2(1.0f, 1.0f) });
+	skyboxFogMesh->SetVertexIndices({ 0,1,2,2,3,0 });
+	skyboxFogMesh->UploadToGPU();
 
 	std::string dayFilenames[6] = {
 		"/Cubemap/skyrender0004.png",
@@ -37,24 +45,56 @@ OGLSkybox::OGLSkybox() {
 	LoadTextures(dayFilenames, skyboxTexDay);
 	LoadTextures(nightFilenames, skyboxTexNight);
 
+	glGenFramebuffers(1, &skyboxFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
+
+	//creating a texture to store the resultant skybox texture
+	glGenTextures(1, &skyboxTexFinal);
+	glBindTexture(GL_TEXTURE_2D, skyboxTexFinal);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Window::GetWindow()->GetScreenSize().x, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	// attach it to currently bound framebuffer object
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyboxTexFinal, 0);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 OGLSkybox::~OGLSkybox() {
 	delete skyboxShader;
+	delete skyboxFogShader;
 	delete skyboxMesh;
+	delete skyboxFogMesh;
 	glDeleteTextures(1, &skyboxTexDay);
 	glDeleteTextures(1, &skyboxTexNight);
-
+	glDeleteTextures(1, &skyboxTexFinal);
+	glDeleteFramebuffers(1, &skyboxFBO);
 }
 
 void OGLSkybox::Update(float dt) {
-	currentRotation += ROTATE_SPEED * dt;
+	//currentRotation += ROTATE_SPEED * dt;
 	float time = Window::GetWindow()->GetTimer()->GetTotalTimeSeconds();
 	dayNightRatio = (sin(phaseShift + time * frequency) * 0.5) + 0.5;
 }
 
 Matrix4 OGLSkybox::GetTransformationMatrix() {
 	return Matrix4::Rotation(currentRotation, Vector3(0, 1, 0));
+}
+
+void OGLSkybox::RenderFog() {
+	//rendering skybox fog to the default fbo:
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//binding skybox texture to shader:
+	glUniform1i(glGetUniformLocation(skyboxFogShader->GetProgramID(), "skyboxTex"), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, skyboxTexFinal);
+
 }
 
 void OGLSkybox::LoadTextures(std::string* filenames, GLuint& texID) {

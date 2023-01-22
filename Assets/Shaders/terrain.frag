@@ -3,6 +3,7 @@
 uniform vec4 		objectColour;
 uniform vec3		fogColour;
 uniform sampler2DShadow shadowTex;
+uniform sampler2D 	skyboxTex;
 
 uniform sampler2D 	splatMapTex;
 uniform sampler2D 	rTex;
@@ -74,5 +75,7 @@ void main(void)
 	
 	fragColor.a = albedo.a;
 
-	fragColor.rgb = mix(fogColour, fragColor.rgb, IN.visibility);
+	vec4 skyColour = texture(skyboxTex, gl_FragCoord.xy);
+	//vec4 skyFogMix = mix(skyColour, vec4(fogColour, 1.0), IN.visibility);
+	fragColor.rgb = mix(skyColour.rgb, fragColor.rgb, IN.visibility);
 }

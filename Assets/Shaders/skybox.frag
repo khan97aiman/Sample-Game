@@ -14,8 +14,10 @@ in Vertex {
 out vec4 fragColour;
 const float belowHorizonLevel = 0.0f;
 const float aboveHorizonLevel = 0.25f;
+const float offset = 1.0 / 300.0;  
 
 void main(void)	{
+
 	vec3 viewDir = normalize(IN.viewDir);
 	vec4 dayTexture = texture(cubeTexDay, viewDir);
 	vec4 nightTexture = texture(cubeTexNight, viewDir);
@@ -24,7 +26,7 @@ void main(void)	{
 	fragColour = pow(finalTexture, vec4(2.2f));
 
 	if (false) {
-		float ratio = clamp((viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
-		fragColour.rgb = mix(fogColour, fragColour.rgb, ratio);
+		//float ratio = clamp((viewDir.y - belowHorizonLevel) / (aboveHorizonLevel - belowHorizonLevel), 0.0, 1.0);
+		fragColour.rgb = mix(fogColour, fragColour.rgb, 0.75);
 	}
 }

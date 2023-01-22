@@ -160,7 +160,7 @@ void GameTechRenderer::RenderShadowMap() {
 	glCullFace(GL_BACK);
 }
 
-void GameTechRenderer::RenderSkybox() {
+void GameTechRenderer::RenderSky() {
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
@@ -179,7 +179,7 @@ void GameTechRenderer::RenderSkybox() {
 	int transformationLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "transformationMatrix");
 	int useFogLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "useFog");;
 	int fogColourLocation = glGetUniformLocation(skyboxShader->GetProgramID(), "fogColour");;
-	int texLocationDay  = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexDay");
+	int texLocationDay = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexDay");
 	int texLocationNight = glGetUniformLocation(skyboxShader->GetProgramID(), "cubeTexNight");
 	int dayNightRatio = glGetUniformLocation(skyboxShader->GetProgramID(), "dayNightRatio");
 
@@ -205,6 +205,25 @@ void GameTechRenderer::RenderSkybox() {
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+}
+
+void GameTechRenderer::RenderSkybox() {
+	glBindFramebuffer(GL_FRAMEBUFFER, skybox->GetFBO());
+	glClear(GL_COLOR_BUFFER_BIT);
+	RenderSky();
+	// ----------------------------------------------------------------------------------------------------
+	
+	BindShader(skybox->GetFogShader());
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	////binding skybox texture to shader:
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(glGetUniformLocation(skybox->GetFogShader()->GetProgramID(), "skyboxTex"), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, skybox->GetFinalTexID());
+	BindMesh(skybox->GetFogMesh());
+	DrawBoundMesh();
+	//RenderSky();
 }
 
 void GameTechRenderer::RenderHUD() {
@@ -241,6 +260,7 @@ void GameTechRenderer::RenderCamera() {
 	int hasTexLocation  = 0;
 	int useFogLocation = 0;
 	int fogColourLocation = 0;
+	int skyboxTexLocation = 0;
 	int shadowLocation  = 0;
 	int jointsLocation	= 0;
 
@@ -274,7 +294,7 @@ void GameTechRenderer::RenderCamera() {
 			hasTexLocation  = glGetUniformLocation(shader->GetProgramID(), "hasTexture");
 			useFogLocation	= glGetUniformLocation(shader->GetProgramID(), "useFog");
 			fogColourLocation = glGetUniformLocation(shader->GetProgramID(), "fogColour");
-
+			skyboxTexLocation = glGetUniformLocation(shader->GetProgramID(), "skyboxTex");
 
 			lightPosLocation	= glGetUniformLocation(shader->GetProgramID(), "lightPos");
 			lightColourLocation = glGetUniformLocation(shader->GetProgramID(), "lightColour");
@@ -299,6 +319,11 @@ void GameTechRenderer::RenderCamera() {
 
 			int shadowTexLocation = glGetUniformLocation(shader->GetProgramID(), "shadowTex");
 			glUniform1i(shadowTexLocation, 1);
+			
+			//binding skybox texture to shader:
+			glUniform1i(skyboxTexLocation, 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, skybox->GetFinalTexID());
 
 			activeShader = shader;
 		}
@@ -323,7 +348,7 @@ void GameTechRenderer::RenderCamera() {
 
 			//for the current submesh, get the vector of textures and send them to shader
 			std::vector<std::pair<std::string, TextureBase*>> subMeshTextures = i->GetTextures(index);
-			int texUnit = 0;
+			int texUnit = 1;
 			for (const auto& texturePairs : subMeshTextures) {
 				BindTextureToShader(texturePairs.second, texturePairs.first, texUnit);
 				texUnit++;

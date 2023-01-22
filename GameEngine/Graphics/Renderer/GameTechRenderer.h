@@ -44,6 +44,7 @@ namespace NCL {
 			void RenderShadowMap();
 			void RenderCamera(); 
 			void RenderSkybox();
+			void RenderSky();
 			void RenderHUD();
 
 			void SetDebugStringBufferSizes(size_t newVertCount);
