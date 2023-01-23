@@ -316,6 +316,8 @@ void GameTechRenderer::RenderCamera() {
 			glUniform1i(skyboxTexLocation, 0);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, skybox->GetFinalTexID());
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 			activeShader = shader;
 		}

@@ -75,7 +75,6 @@ void main(void)
 	
 	fragColor.a = albedo.a;
 
-	vec4 skyColour = texture(skyboxTex, gl_FragCoord.xy);
-	//vec4 skyFogMix = mix(skyColour, vec4(fogColour, 1.0), IN.visibility);
+	vec4 skyColour = texture(skyboxTex, gl_FragCoord.xy / vec2(1280, 720));
 	fragColor.rgb = mix(skyColour.rgb, fragColor.rgb, IN.visibility);
 }

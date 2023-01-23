@@ -43,9 +43,10 @@ OGLSkybox::OGLSkybox() {
 	//creating a texture to store the resultant skybox texture
 	glGenTextures(1, &skyboxTexFinal);
 	glBindTexture(GL_TEXTURE_2D, skyboxTexFinal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Window::GetWindow()->GetScreenSize().x, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Window::GetWindow()->GetScreenSize().x, Window::GetWindow()->GetScreenSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	// attach it to currently bound framebuffer object
